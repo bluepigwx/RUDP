@@ -1,22 +1,23 @@
-﻿#include <WinSock2.h>
-
+﻿
 #include "SocketSystem.h"
 #include "FSocket.h"
-
+#include "Net.h"
 
 int SocketSystem::Init()
 {
+    Net_Init();
+    
     return 0;
 }
 
 
 void SocketSystem::Shutdown()
 {
-    
+    Net_Shutdown();
 }
 
 
-FSocket* SocketSystem::CreateSocket(SOCKET_TYPE type)
+FSocket* SocketSystem::CreateSocket(IPSOCK_TYPE type)
 {
     return nullptr;
 }

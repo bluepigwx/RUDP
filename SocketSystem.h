@@ -1,11 +1,7 @@
 ﻿#pragma once
 
 
-enum SOCKET_TYPE
-{
-    SOCKET_STREAM, 
-    SOCKET_DGRAM,
-};
+#include "Net.h"
 
 
 class FSocket;
@@ -19,7 +15,7 @@ public:
 
     void Shutdown();
 
-    FSocket* CreateSocket(SOCKET_TYPE type);
+    FSocket* CreateSocket(IPSOCK_TYPE type);
 
     void ReleaseSocket(FSocket* s);
 };

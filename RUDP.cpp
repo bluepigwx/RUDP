@@ -4,12 +4,16 @@
 #include <iostream>
 #include "Console.h"
 #include "IOBuffer.h"
-
+#include "Net.h"
 
 
 int main()
 {
     std::cout << "Hello World!\n";
+
+
+    NetAddr adr;
+    Net_StringToNetAdr("127.0.0.1", 99988, &adr);
     
     Con_Init();
     

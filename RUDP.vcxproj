@@ -124,6 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Client.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="FSocket.cpp" />
@@ -132,6 +133,7 @@
     <ClCompile Include="SocketSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Client.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Console.h" />
