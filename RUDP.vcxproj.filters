@@ -18,5 +18,49 @@
     <ClCompile Include="RUDP.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Command.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Console.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FSocket.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Net.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketSystem.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Command.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Console.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FSocket.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="IOBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Net.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Net_Chan.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Server.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketSystem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
