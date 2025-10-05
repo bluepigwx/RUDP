@@ -1,32 +1,24 @@
 ﻿// RUDP.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
 //
 
-#include <iostream>
-#include "Console.h"
-#include "IOBuffer.h"
 #include "Net.h"
+#include "Common.h"
+#include "Log.h"
 
 
 int main()
 {
-    std::cout << "Hello World!\n";
-
-
     NetAddr adr;
     Net_StringToNetAdr("127.0.0.1", 99988, &adr);
+
+    Log(LOG_CAT_LOG, "hello %d",5);
+
+    Common_Init();
+
+    Common_Run();
+
+    Common_Finish();
     
-    Con_Init();
-    
-    Con_Run();
-
-    int i = 3;
-
-    char sz[32];
-    IBuffer ib(sz, 32);
-
-    ib << i;
-
-    i = 5;
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单

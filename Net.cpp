@@ -1,6 +1,64 @@
 #include <WinSock2.h>
 #include <ws2tcpip.h> 
 #include "Net.h"
+#include "IOBuffer.h"
+
+#include <iostream>
+
+#include "Log.h"
+
+
+static const char* Net_ErrToString(int err)
+{
+    switch (err)
+	{
+	case WSAEINTR: return "WSAEINTR";
+	case WSAEBADF: return "WSAEBADF";
+	case WSAEACCES: return "WSAEACCES";
+	case WSAEDISCON: return "WSAEDISCON";
+	case WSAEFAULT: return "WSAEFAULT";
+	case WSAEINVAL: return "WSAEINVAL";
+	case WSAEMFILE: return "WSAEMFILE";
+	case WSAEWOULDBLOCK: return "WSAEWOULDBLOCK";
+	case WSAEINPROGRESS: return "WSAEINPROGRESS";
+	case WSAEALREADY: return "WSAEALREADY";
+	case WSAENOTSOCK: return "WSAENOTSOCK";
+	case WSAEDESTADDRREQ: return "WSAEDESTADDRREQ";
+	case WSAEMSGSIZE: return "WSAEMSGSIZE";
+	case WSAEPROTOTYPE: return "WSAEPROTOTYPE";
+	case WSAENOPROTOOPT: return "WSAENOPROTOOPT";
+	case WSAEPROTONOSUPPORT: return "WSAEPROTONOSUPPORT";
+	case WSAESOCKTNOSUPPORT: return "WSAESOCKTNOSUPPORT";
+	case WSAEOPNOTSUPP: return "WSAEOPNOTSUPP";
+	case WSAEPFNOSUPPORT: return "WSAEPFNOSUPPORT";
+	case WSAEAFNOSUPPORT: return "WSAEAFNOSUPPORT";
+	case WSAEADDRINUSE: return "WSAEADDRINUSE";
+	case WSAEADDRNOTAVAIL: return "WSAEADDRNOTAVAIL";
+	case WSAENETDOWN: return "WSAENETDOWN";
+	case WSAENETUNREACH: return "WSAENETUNREACH";
+	case WSAENETRESET: return "WSAENETRESET";
+	case WSAECONNABORTED: return "WSWSAECONNABORTEDAEINTR";
+	case WSAECONNRESET: return "WSAECONNRESET";
+	case WSAENOBUFS: return "WSAENOBUFS";
+	case WSAEISCONN: return "WSAEISCONN";
+	case WSAENOTCONN: return "WSAENOTCONN";
+	case WSAESHUTDOWN: return "WSAESHUTDOWN";
+	case WSAETOOMANYREFS: return "WSAETOOMANYREFS";
+	case WSAETIMEDOUT: return "WSAETIMEDOUT";
+	case WSAECONNREFUSED: return "WSAECONNREFUSED";
+	case WSAELOOP: return "WSAELOOP";
+	case WSAENAMETOOLONG: return "WSAENAMETOOLONG";
+	case WSAEHOSTDOWN: return "WSAEHOSTDOWN";
+	case WSASYSNOTREADY: return "WSASYSNOTREADY";
+	case WSAVERNOTSUPPORTED: return "WSAVERNOTSUPPORTED";
+	case WSANOTINITIALISED: return "WSANOTINITIALISED";
+	case WSAHOST_NOT_FOUND: return "WSAHOST_NOT_FOUND";
+	case WSATRY_AGAIN: return "WSATRY_AGAIN";
+	case WSANO_RECOVERY: return "WSANO_RECOVERY";
+	case WSANO_DATA: return "WSANO_DATA";
+	default: return "NO ERROR";
+	}
+}
 
 
 int Net_Init()
@@ -126,6 +184,67 @@ bool Net_CompareNetAdr(NetAddr* ladr, NetAddr* radr)
 
     return true;
 }
+
+
+
+int Net_Send(int sock, char* data, int len, NetAddr* nadr)
+{
+    sockaddr saddr;
+
+    Net_NetAdrToSockAdr(nadr, &saddr);
+
+    int ret = sendto(sock, data, len, 0, &saddr, sizeof(saddr));
+    if (ret == -1)
+    {
+        int err = ::WSAGetLastError();
+        if (err == WSAEWOULDBLOCK)
+        {
+            return 0;
+        }
+    	
+    	Log(LOG_CAT_ERR, "net err code[%s] str[%s]", err, Net_ErrToString(err));
+        return -1;
+    }
+
+    return 0;
+}
+
+
+// 进程内回环，例如Listen Server的主机端，或者纯单机模式获取本地输入
+static bool Net_LoopbackGet(IBuffer2k* buff, NetAddr* from)
+{
+	
+}
+
+
+bool Net_Get(int sock, IBuffer2k* buff, NetAddr* from)
+{
+	if (sock == -1)
+	{
+		return false;
+	}
+	
+	sockaddr saddr;
+	int fromelen = sizeof(saddr);
+	int ret = recvfrom(sock, buff->Get(), buff->GetMaXSize(), 0, &saddr, &fromelen);
+	if (ret == -1)
+	{
+		if (ret == WSAEWOULDBLOCK)
+		{
+			return false;
+		}
+		
+		int err = ::WSAGetLastError();
+		Net_ErrToString(err);
+		return false;
+	}
+	
+	Net_SockAdrToNetAdr(&saddr, from);
+
+    return true;
+}
+
+
 
 
 

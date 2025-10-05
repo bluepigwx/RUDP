@@ -7,7 +7,7 @@
 class FSocket
 {
 public:
-    FSocket(SOCKET s, SOCKET_TYPE t)
+    FSocket(SOCKET s, IPSOCK_TYPE t)
         :Socket(s)
         ,Type(t)
     {
@@ -26,5 +26,5 @@ public:
     
 private:
     SOCKET Socket;
-    SOCKET_TYPE Type;
+    IPSOCK_TYPE Type;
 };

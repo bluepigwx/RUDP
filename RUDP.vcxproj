@@ -125,12 +125,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="CL_Login.cpp" />
     <ClCompile Include="Command.cpp" />
+    <ClCompile Include="Common.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="FSocket.cpp" />
+    <ClCompile Include="Log.cpp" />
     <ClCompile Include="Net.cpp" />
+    <ClCompile Include="Net_Chan.cpp" />
     <ClCompile Include="RUDP.cpp" />
     <ClCompile Include="SocketSystem.cpp" />
+    <ClCompile Include="SV_Login.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h" />
@@ -139,8 +144,10 @@
     <ClInclude Include="Console.h" />
     <ClInclude Include="FSocket.h" />
     <ClInclude Include="IOBuffer.h" />
+    <ClInclude Include="Log.h" />
     <ClInclude Include="Net.h" />
     <ClInclude Include="Net_Chan.h" />
+    <ClInclude Include="Protocol.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="SocketSystem.h" />
   </ItemGroup>

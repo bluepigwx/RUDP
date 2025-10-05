@@ -13,7 +13,7 @@ protected:
     BufferBasic() : _state(_error), _buffer(nullptr), _max_size(0), _pos(0) {}
 
 public:
-    BufferBasic(char* data, unsigned int max_size) : _state(_good), _buffer(data), _max_size(max_size), _pos(0) {}
+    BufferBasic(char* data, int max_size) : _state(_good), _buffer(data), _max_size(max_size), _pos(0) {}
 
 protected:
     void SetState(state NewState)
@@ -24,8 +24,8 @@ protected:
 protected:
     state _state;
     char* _buffer;
-    unsigned int _max_size;
-    unsigned int _pos;
+    int _max_size;
+    int _pos;
 };
 
 
@@ -36,18 +36,18 @@ protected:
     IBuffer() {}
 
 public:
-    IBuffer(char* data, unsigned int size) : BufferBasic(data, size) {}
+    IBuffer(char* data, int size) : BufferBasic(data, size) {}
     
     template<class T>
     IBuffer& operator << (T value)
     {
-        return Push(&value, sizeof(T));
+        return Serialize(&value, sizeof(T));
     }
-
+    
     // C++字符串特化处理
     IBuffer& operator << (std::string& value)
     {
-        return Push((char*)(value.c_str()), (unsigned int)value.size() + 1);
+        return Serialize((char*)(value.c_str()), value.size() + 1);
     }
 
     char* Get()
@@ -60,12 +60,12 @@ public:
         _pos = 0;
     }
 
-    unsigned int Size()
+    int Size()
     {
         return _pos;
     }
 
-    unsigned int GetMaXSize()
+    int GetMaXSize()
     {
         return _max_size;
     }
@@ -79,9 +79,8 @@ public:
     {
         return _state == _good;
     }
-
-private:
-    IBuffer& Push(void* data, unsigned int size)
+    
+    IBuffer& Serialize(void* data, int size)
     {
         if (!data || size == 0 || size > _max_size)
         {
@@ -105,7 +104,7 @@ private:
 
 // 自带缓冲区的IBuffer
 template<size_t MaxBytes=256>
-class FixIBuffer : IBuffer
+class FixIBuffer : public IBuffer
 {
 public:
     FixIBuffer()

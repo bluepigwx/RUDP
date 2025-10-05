@@ -6,9 +6,6 @@
 #include "Command.h"
 
 
-
-static bool Exit = false;
-
 // Cmd和参数buffer
 const int MAX_COMMAND_ARGC = 64;
 static char* Argv[MAX_COMMAND_ARGC];
@@ -18,12 +15,6 @@ static int Argc = 0;
 const int MAX_COMMAND_LINE_BUFFER = 256;
 static char CommandLineBuffer[MAX_COMMAND_LINE_BUFFER];
 static int BufferPos = 0;
-
-
-static void Con_Exit(CmdParam& Param)
-{
-    Exit = true;
-}
 
 
 static void Con_ParseCmd(char* CmdBuffer)
@@ -86,37 +77,32 @@ int Con_Init()
     BufferPos = 0;
     CommandLineBuffer[BufferPos] = 0;
     
-    Cmd_Register("exit", Con_Exit);
-    
     return 0;
 }
 
 
-void Con_Run()
+void Con_Frame()
 {
-    while (!Exit)
+    if (_kbhit())
     {
-        if (_kbhit())
+        char c = _getch();
+        if (c == '\n' || c == '\r')
         {
-            char c = _getch();
-            if (c == '\n' || c == '\r')
-            {
-                CommandLineBuffer[BufferPos] = 0;
-                // 解析命令
-                Con_ParseCmd(CommandLineBuffer);
-                // 执行命令
-                Con_ExecCmd();
-                // 执行完命令清空buffer
-                BufferPos = 0;
-                Argc = 0;
+            CommandLineBuffer[BufferPos] = 0;
+            // 解析命令
+            Con_ParseCmd(CommandLineBuffer);
+            // 执行命令
+            Con_ExecCmd();
+            // 执行完命令清空buffer
+            BufferPos = 0;
+            Argc = 0;
 
-                std::cout << '\n';
+            std::cout << std::endl;
 
-                continue;
-            }
-
-            CommandLineBuffer[BufferPos++] = c;
-            std::cout << c;
+            return;
         }
+
+        CommandLineBuffer[BufferPos++] = c;
+        std::cout << c;
     }
 }

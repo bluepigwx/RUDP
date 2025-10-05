@@ -4,7 +4,6 @@
 
 
 
-
 typedef enum 
 {
     CS_FREE,    // 可以建立链接
@@ -22,3 +21,11 @@ typedef struct
 
     IBuffer1k datagram; // 发送给客户端的数据暂存区
 }ClientConnection;
+
+
+
+// 服务端状态实例
+struct ServerStatic
+{
+    
+};

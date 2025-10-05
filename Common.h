@@ -1,20 +1,12 @@
 #pragma once
 
 
-#include "IOBuffer.h"
+#define	MAX_OSPATH  128
 
 
-typedef struct
-{
-    char ip[4];
-    unsigned short port;
-}NetAddr;
 
+int Common_Init();
 
-// 网络通道
-typedef struct
-{
-    NetAddr RemoteAddr; // 通道对端的地址
-    
-    IBuffer1k Message;
-}NetChan;
+void Common_Run();
+
+void Common_Finish();

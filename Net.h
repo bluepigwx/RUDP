@@ -1,5 +1,6 @@
 #pragma once
 
+#include "IObuffer.h"
 // 基本ip网络库
 
 
@@ -49,10 +50,10 @@ bool Net_CompareNetAdr(NetAddr* ladr, NetAddr* radr);
 
 // 打印地址
 const char* Net_NetAdrToString(NetAddr* nadr);
-
 const char* Net_SockAdtToString(struct sockaddr* sadr);
 
 
-
-
-
+// 发送
+int Net_Send(int sock, char* data, int len, NetAddr* nadr);
+// 接受
+bool Net_Get(int sock, IBuffer2k* buff, NetAddr* from);

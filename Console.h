@@ -2,4 +2,5 @@
 
 
 int Con_Init();
-void Con_Run();
+
+void Con_Frame();
