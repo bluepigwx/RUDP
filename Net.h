@@ -4,9 +4,17 @@
 // 基本ip网络库
 
 
+enum ADDR_TYPE
+{
+    ADDR_TYPE_IP,       //ip地址类型
+    ADDR_TYPE_LOOPBACK, //本地回环地址类型
+};
+
+
 // ip地址描述
 struct NetAddr
 {
+    ADDR_TYPE AddrType;
     unsigned char ip[4];
     unsigned short port;
 };

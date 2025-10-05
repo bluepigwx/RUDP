@@ -213,12 +213,18 @@ int Net_Send(int sock, char* data, int len, NetAddr* nadr)
 // 进程内回环，例如Listen Server的主机端，或者纯单机模式获取本地输入
 static bool Net_LoopbackGet(IBuffer2k* buff, NetAddr* from)
 {
-	
+	from->AddrType = ADDR_TYPE_LOOPBACK;
+	return false;
 }
 
 
 bool Net_Get(int sock, IBuffer2k* buff, NetAddr* from)
 {
+	if (Net_LoopbackGet(buff, from))
+	{
+		return  true;
+	}
+	
 	if (sock == -1)
 	{
 		return false;
@@ -233,7 +239,8 @@ bool Net_Get(int sock, IBuffer2k* buff, NetAddr* from)
 		{
 			return false;
 		}
-		
+
+		// 报错的话后面再考虑如何细化处理
 		int err = ::WSAGetLastError();
 		Net_ErrToString(err);
 		return false;

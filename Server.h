@@ -1,31 +1,27 @@
 #pragma once
 
-#include "IOBuffer.h"
+#include "Net_Chan.h"
 
-
-
-typedef enum 
+// 服务端上的客户端实体
+struct SvClient
 {
-    CS_FREE,    // 可以建立链接
-    CS_WAITE_TO_CLOSE,   // 等待关闭链接
-    CS_CONNECTED,   // 已经建立链接
-    CS_SPAWNED, // 已经进入游戏
-}CLIENT_STATE;
+    NetChannel Channel;    
+};
 
 
-
-// 一个客户端链接
-typedef struct
-{
-    CLIENT_STATE cs;
-
-    IBuffer1k datagram; // 发送给客户端的数据暂存区
-}ClientConnection;
-
-
-
-// 服务端状态实例
+// 服务端状态实例，负责维护客户端连接
 struct ServerStatic
 {
-    
+    int ServerSocket;
+
+    SvClient* Clients;
+    int NumClients; // 客户端的实际数量
 };
+extern ServerStatic svs;
+
+
+int SV_Init();
+
+void SV_Finish();
+
+void SV_Frame(int Msec);

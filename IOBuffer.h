@@ -134,3 +134,10 @@ typedef FixIBuffer<8192> IBuffer8k;
 typedef FixIBuffer<16384> IBuffer16k;
 typedef FixIBuffer<32768> IBuffer32k;
 typedef FixIBuffer<65536> IBuffer64k;
+
+
+// 数据输出类
+class OBuffer : public BufferBasic
+{
+    
+};

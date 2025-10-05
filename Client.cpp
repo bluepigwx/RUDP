@@ -22,7 +22,7 @@ int CL_Init()
 
 
 
-static void CL_ReceivePacket()
+static void CL_ReadPacket()
 {
     static IBuffer2k buff;
     buff.Clear();
@@ -38,7 +38,7 @@ static void CL_ReceivePacket()
 
 void CL_Frame(int)
 {
-    CL_ReceivePacket();
+    CL_ReadPacket();
     
     CL_CheckForConnect();
 }
