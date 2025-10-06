@@ -9,6 +9,10 @@
 #include <iostream>
 
 #include "Log.h"
+#include "Server.h"
+
+
+#pragma comment(lib, "winmm.lib")
 
 #define MAX_FPS 60.0f	// 控制每秒最大帧率
 
@@ -38,7 +42,11 @@ static void Common_Frame(int Msec)
 	// 处理控制台输入
 	Con_Frame();
 
+	SV_Frame(Msec);
+
 	CL_Frame(Msec);
+
+	//Log(LOG_CAT_LOG, "Msec %d", Msec);
 	
 }
 
@@ -52,7 +60,7 @@ void Common_Run()
 	while (!Exit)
 	{
 		// 尝试维持固定帧率运行
-		//::timeBeginPeriod(1);
+		::timeBeginPeriod(1);
 		int CurrentMsec = ::GetTickCount();
 		int DeltaMsec = CurrentMsec - OldMsec;
 		
@@ -66,7 +74,7 @@ void Common_Run()
 			
 			//Log(LOG_CAT_LOG, "enter sleep");
 		}
-		//::timeEndPeriod(1);
+		::timeEndPeriod(1);
 		OldMsec = CurrentMsec;
 		
 		// 开启主要帧逻辑

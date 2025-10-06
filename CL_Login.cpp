@@ -20,6 +20,7 @@ void CL_StartConnect_f(CmdParam& Param)
     if (cls.ClinetSocket != -1)
     {
         Net_CloseSocket(cls.ClinetSocket);
+        cls.ClinetSocket = -1;
     }
     cls.ClinetSocket = Net_Socket(IPSOCK_TYPE_DGRAM);
 }
@@ -28,6 +29,11 @@ void CL_StartConnect_f(CmdParam& Param)
 void CL_CheckForConnect()
 {
     if (cls.ConnState != CONN_STAT_CONNECTING)
+    {
+        return;
+    }
+
+    if (cls.ClinetSocket == -1)
     {
         return;
     }
@@ -42,4 +48,25 @@ void CL_CheckForConnect()
 
     char msg = CONN_LESS_MSG_GETCHALLENGE;  //客户端开始握手
     NetChan_SendConnetionLessMsg(cls.ClinetSocket, &msg, sizeof(msg), &ServerAddr);
+}
+
+
+void CL_ProcessConnectionLess(OBuffer* ob, NetAddr* from)
+{
+    char op;
+    *ob >> op;
+
+    switch (op)
+    {
+    case CONN_LESS_MSG_CHALLENGE_REP:
+        break;
+    case CONN_LESS_MSG_CHALLENGE_FULL_REP:
+        break;
+    case CONN_LESS_MSG_CONNECT_REP:
+        break;
+    case CONN_LESS_MSG_CONNECT_FULL_REP:
+        break;
+    default:
+        ;
+    }
 }

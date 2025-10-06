@@ -48,6 +48,15 @@
     <ClCompile Include="SV_Login.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Net_Chan.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Server.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h">
@@ -78,6 +87,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Client.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Protocol.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

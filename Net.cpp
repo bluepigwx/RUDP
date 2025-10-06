@@ -245,6 +245,8 @@ bool Net_Get(int sock, IBuffer2k* buff, NetAddr* from)
 		Net_ErrToString(err);
 		return false;
 	}
+
+	buff->SetSize(ret);
 	
 	Net_SockAdrToNetAdr(&saddr, from);
 
