@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <cstring>
 #include <string>
@@ -87,7 +87,7 @@ public:
     // C++字符串特化处理
     IBuffer& operator << (std::string& value)
     {
-        return Serialize((char*)(value.c_str()), value.size() + 1);
+        return Serialize((char*)(value.c_str()), (int)value.size() + 1);
     }
     
     IBuffer& Serialize(void* data, int size)
@@ -166,7 +166,7 @@ public:
         const char* str = _buffer + _pos;
         value = str;
 
-        _pos += value.size() + 1;
+        _pos += (int)value.size() + 1;
         if (_pos > _max_size)
         {
             SetState(_error);

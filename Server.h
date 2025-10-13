@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Net_Chan.h"
 
@@ -39,6 +39,13 @@ struct ServerStatic
 };
 extern ServerStatic svs;
 
+
+// 一局游戏
+struct ServerInst
+{
+    
+};
+extern ServerInst svinst;
 
 int SV_Init();
 

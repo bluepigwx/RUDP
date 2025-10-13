@@ -1,4 +1,8 @@
-#pragma once
+﻿#pragma once
+
+
+// 默认监听端口
+#define DEFAULT_SVR_PORT 1987
 
 
 // 握手协议

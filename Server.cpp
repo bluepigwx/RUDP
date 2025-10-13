@@ -1,10 +1,11 @@
-// 服务端主控流程
+﻿// 服务端主控流程
 
 
 #include "Server.h"
-
+#include "Common.h"
 #include "FSocket.h"
 #include "Net.h"
+#include "Protocol.h"
 
 ServerStatic svs;
 
@@ -17,6 +18,31 @@ int SV_Init()
 {
     memset(&svs, 0, sizeof(svs));
     svs.ServerSocket = -1;
+    svs.Msec = ::GetTickCount();
+
+    // 判断是否启动服务器
+    int i = COM_FindArg("maxclients");
+    if (i>=0)
+    {
+        const char* StrNumClients = COM_Argv(i+1);
+        int NumClients = atoi(StrNumClients);
+        if (NumClients > 1 && NumClients <= MAX_CLIENT_NUM)
+        {
+            // 创建服务器
+            svs.ServerSocket = Net_Socket(IPSOCK_TYPE_DGRAM);
+
+            NetAddr adr;
+            Net_StringToNetAdr("0.0.0.0", DEFAULT_SVR_PORT, &adr);
+            Net_Bind(svs.ServerSocket, &adr);
+        }
+    }
+
+    // 是否加载指定地图
+    i = COM_FindArg("map");
+    if (i>=0)
+    {
+        // todo 加载地图....
+    }
     
     return 0;
 }
@@ -24,6 +50,11 @@ int SV_Init()
 
 void SV_Finish()
 {
+    if (svs.ServerSocket != -1)
+    {
+        Net_CloseSocket(svs.ServerSocket);
+        svs.ServerSocket = -1;
+    }
 }
 
 

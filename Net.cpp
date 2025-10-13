@@ -96,6 +96,13 @@ int Net_Socket(IPSOCK_TYPE type)
         soc = (int)socket(AF_INET, SOCK_STREAM, 0);
     }
 
+    if (soc == -1)
+    {
+        int err = ::WSAGetLastError();
+        const char* StrErr = Net_ErrToString(err);
+        Log(LOG_CAT_ERR, "Net_Socket fail err[%d] str[%s]", err, StrErr);
+    }
+
     return soc;
 }
 
@@ -242,7 +249,8 @@ bool Net_Get(int sock, IBuffer2k* buff, NetAddr* from)
 
 		// 报错的话后面再考虑如何细化处理
 		int err = ::WSAGetLastError();
-		Net_ErrToString(err);
+		const char* StrErr = Net_ErrToString(err);
+        
 		return false;
 	}
 
@@ -252,8 +260,5 @@ bool Net_Get(int sock, IBuffer2k* buff, NetAddr* from)
 
     return true;
 }
-
-
-
 
 

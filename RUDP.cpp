@@ -6,14 +6,18 @@
 #include "Log.h"
 
 
-int main()
+void Test()
 {
     NetAddr adr;
-    Net_StringToNetAdr("127.0.0.1", 99988, &adr);
+    Net_StringToNetAdr("127.0.0.1", 1998, &adr);
 
     Log(LOG_CAT_LOG, "hello %d",5);
+}
 
-    Common_Init();
+
+int main(int argc, char** argv)
+{
+    Common_Init(argc, argv);
 
     Common_Run();
 

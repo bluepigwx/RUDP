@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "IObuffer.h"
 // 基本ip网络库

@@ -1,15 +1,17 @@
-#include "Common.h"
+﻿#include "Common.h"
 #include "Console.h"
 #include "Client.h"
 #include "FSocket.h"
 #include "Command.h"
+#include "Server.h"
+
 
 #include <Windows.h>
 #include <mmsystem.h>
 #include <iostream>
 
 #include "Log.h"
-#include "Server.h"
+
 
 
 #pragma comment(lib, "winmm.lib")
@@ -25,13 +27,21 @@ static void Common_Exit_f(CmdParam& Param)
 }
 
 
-int Common_Init()
+int Common_Init(int argc, char** argv)
 {
 	Cmd_Register("exit", Common_Exit_f);
+
+	COM_Init(argc, argv);
 
 	Cmd_Init();
 	
 	Con_Init();
+
+	Net_Init();
+
+	SV_Init();
+
+	CL_Init();
 	
 	return 0;
 }
@@ -54,7 +64,7 @@ static void Common_Frame(int Msec)
 
 void Common_Run()
 {
-	static int MsecPerFrame = ((1.0f / MAX_FPS) * 1000.0f);
+	static int MsecPerFrame = (int)((1.0f / MAX_FPS) * 1000.0f);
 	static int OldMsec = ::GetTickCount() - 1;
 	
 	while (!Exit)
@@ -86,4 +96,60 @@ void Common_Run()
 void Common_Finish()
 {
 	
+}
+
+
+////////////////////////////////////////////////////////////////
+//COM
+#define MAX_COM_ARG 128
+
+int com_argc;
+char* com_argv[MAX_COM_ARG];
+
+
+void COM_Init(int argc, char** argv)
+{
+	if (argc > MAX_COM_ARG)
+	{
+		return;
+	}
+
+	com_argc = argc;
+	for (int i=0; i<argc; ++i)
+	{
+		com_argv[i] = argv[i];
+	}
+}
+
+
+int COM_Argc()
+{
+	return com_argc;
+}
+
+
+const char* COM_Argv(int i)
+{
+	if (i >= com_argc)
+	{
+		return nullptr;
+	}
+
+	return com_argv[i];
+}
+
+
+// 查看指定字符串是否存在
+// 查找命中返回字符串下标，否则返回-1
+int COM_FindArg(const char* arg)
+{
+	for (int i=0; i<com_argc; ++i)
+	{
+		if (!strcmp(arg, com_argv[i]))
+		{
+			return i;
+		}
+	}
+
+	return -1;
 }

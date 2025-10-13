@@ -1,6 +1,16 @@
 #include "Net_Chan.h"
 #include "IOBuffer.h"
 
+
+
+void NetChan_Setup(NetChannel* ch, NetAddr* remote)
+{
+    ch->RemoteAdr = *remote;
+    ch->ReliableBuffer.Clear();
+}
+
+
+
 int NetChan_SendConnetionLessMsg(int sock, char* data, int len, NetAddr* naddr)
 {
     char ConnetionLessHead = -1;

@@ -1,10 +1,21 @@
-#pragma once
+﻿#pragma once
 
 // 客户端主流程控制
 
 
 #include "Net_Chan.h"
 #include "Common.h"
+
+
+// 链接状态
+enum CONN_STATE
+{
+    CONN_STATE_DISCONNECT,  // 未连接
+    CONN_STAT_CONNECTING, // 握手连接中
+    CONN_STAT_CONNECTED, // 已经连接上服务器，等待开启游戏
+    CONN_STAT_ACTIVE, // 游戏正式开始
+};
+
 
 // 客户端状态的实例
 struct ClientStatic
