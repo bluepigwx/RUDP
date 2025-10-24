@@ -80,12 +80,14 @@ static void SV_ClientConnect(OBuffer* ob, NetAddr* from)
         return;
     }
 
+    // 分配一个客户端链接对象
     SvClient* cl = &svs.Clients[svs.NumChallenge];
     svs.NumChallenge++;
     memset(cl, 0, sizeof(*cl));
 
     cl->Msec = svs.Msec;
-    cl->Channel.RemoteAdr = *from;
+    // 建立与客户端的传输通道
+    NetChan_Setup(&cl->Channel, from);
 
     // 回复连接已建立
     ib << CONN_LESS_MSG_CONNECT_REP;
