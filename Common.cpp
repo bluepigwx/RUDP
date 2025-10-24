@@ -4,7 +4,7 @@
 #include "FSocket.h"
 #include "Command.h"
 #include "Server.h"
-
+#include "CVar.h"
 
 #include <Windows.h>
 #include <mmsystem.h>
@@ -30,6 +30,8 @@ static void Common_Exit_f(CmdParam& Param)
 int Common_Init(int argc, char** argv)
 {
 	Cmd_Register("exit", Common_Exit_f);
+
+	CVar_Init();
 
 	COM_Init(argc, argv);
 

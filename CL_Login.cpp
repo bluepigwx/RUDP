@@ -1,10 +1,16 @@
 ﻿#include "Client.h"
 #include "Command.h"
+#include "CVar.h"
+#include "FSocket.h"
 #include "Net.h"
 #include "Protocol.h"
 #include "Log.h"
 
 // 完成客户端登陆握手
+
+
+float VarClientConnectIntervalue = 1000.0f; // 1秒尝试一次与服务器建立链接
+CVar CVarClientConnectIntervalue("ClientConnectIntervalue", &VarClientConnectIntervalue);
 
 
 void CL_StartConnect_f(CmdParam& Param)
@@ -45,6 +51,14 @@ void CL_CheckForConnect()
     {
         return;
     }
+
+    int Now = ::GetTickCount();
+    if (Now - cls.LastConnectTime < VarClientConnectIntervalue)
+    {
+        return;
+    }
+
+    cls.LastConnectTime = Now;
 
     // 检测服务器地址是否有效
     NetAddr ServerAddr;

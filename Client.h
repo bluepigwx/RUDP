@@ -20,12 +20,13 @@ enum CONN_STATE
 // 客户端状态的实例
 struct ClientStatic
 {
-     CONN_STATE ConnState;   // 记录客户端的连接状态
-     char ServerURL[MAX_OSPATH];   // 目标服务器地址
-     unsigned short ServerPort;    // 目标服务器端口
+    CONN_STATE ConnState;   // 记录客户端的连接状态
+    char ServerURL[MAX_OSPATH];   // 目标服务器地址
+    unsigned short ServerPort;    // 目标服务器端口
+    int LastConnectTime;  // 上次尝试链接时间戳
 
-     int ClinetSocket;
-     NetChannel Channel; // 客户端网络通道
+    int ClinetSocket;
+    NetChannel Channel; // 客户端网络通道
 };
 extern ClientStatic cls;
 

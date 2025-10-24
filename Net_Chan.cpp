@@ -1,6 +1,10 @@
 #include "Net_Chan.h"
 #include "IOBuffer.h"
+#include "CVar.h"
 
+
+float t;
+static CVar test("tt", &t);
 
 
 void NetChan_Setup(NetChannel* ch, NetAddr* remote)

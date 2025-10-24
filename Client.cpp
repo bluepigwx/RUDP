@@ -39,7 +39,9 @@ static void CL_ReadPacket()
         if (IsConnectionless == -1)
         {
             CL_ProcessConnectionLess(&ob, &from);
+            continue;
         }
+        // else
     }
 }
 
