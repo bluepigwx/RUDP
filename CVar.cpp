@@ -1,13 +1,12 @@
 ﻿#include "CVar.h"
 #include "Command.h"
-
-CVarpool CVar::VarPool;
+#include "Log.h"
 
 
 CVar* CVar::Find(const char* Name)
 {
-    CVarpool::iterator it = VarPool.find((char*)Name);
-    if (it == VarPool.end())
+    CVarpool::iterator it = GetVarPool().find(Name);
+    if (it == GetVarPool().end())
     {
         return nullptr;
     }
@@ -30,7 +29,8 @@ CVar* CVar::SetValue(const char* Name, float NewValue)
 }
 
 
-static void CVar_SetVar(CmdParam& Param)
+
+static void CVar_SetVar_f(CmdParam& Param)
 {
     if (Param.size() != 2)
     {
@@ -39,12 +39,26 @@ static void CVar_SetVar(CmdParam& Param)
 
     float NewValue = (float)atof(Param[1].c_str());
     CVar::SetValue(Param[0].c_str(), NewValue);
+    Log(LOG_CAT_LOG, "Set %s = %f", Param[0].c_str(), NewValue);
+}
+
+
+static void CVar_PrintVar_f(CmdParam& Param)
+{
+    CVarpool::const_iterator it = CVar::GetVarPool().begin();
+    while (it != CVar::GetVarPool().end())
+    {
+        Log(LOG_CAT_LOG, "Cvar: %s value: %f", it->first.c_str(), it->second->GetValue());
+        ++it;
+    }
+    
 }
 
 
 void CVar_Init()
 {
-    Cmd_Register("set", CVar_SetVar);
+    Cmd_Register("setvar", CVar_SetVar_f);
+    Cmd_Register("lsvar", CVar_PrintVar_f);
 }
 
 

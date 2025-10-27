@@ -87,7 +87,7 @@ static void SV_ClientConnect(OBuffer* ob, NetAddr* from)
 
     cl->Msec = svs.Msec;
     // 建立与客户端的传输通道
-    NetChan_Setup(&cl->Channel, from);
+    NetChan_Setup(svs.ServerSocket, &cl->Channel, from);
 
     // 回复连接已建立
     ib << CONN_LESS_MSG_CONNECT_REP;

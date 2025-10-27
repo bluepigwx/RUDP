@@ -88,6 +88,8 @@ void Con_Frame()
         char c = _getch();
         if (c == '\n' || c == '\r')
         {
+            std::cout << std::endl;
+
             CommandLineBuffer[BufferPos] = 0;
             // 解析命令
             Con_ParseCmd(CommandLineBuffer);
@@ -96,8 +98,6 @@ void Con_Frame()
             // 执行完命令清空buffer
             BufferPos = 0;
             Argc = 0;
-
-            std::cout << std::endl;
 
             return;
         }

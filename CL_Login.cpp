@@ -105,7 +105,7 @@ static void CL_OnChallengeFull(OBuffer* ob, NetAddr* from)
 static void CL_SetupNetChan(OBuffer* ob, NetAddr* from)
 {
     // 初始化服务端通道
-    NetChan_Setup(&cls.Channel, from);
+    NetChan_Setup(cls.ClinetSocket, &cls.Channel, from);
     // 已连上服务器，可以开局了
     cls.ConnState = CONN_STAT_CONNECTED;
 }

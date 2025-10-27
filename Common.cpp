@@ -5,6 +5,7 @@
 #include "Command.h"
 #include "Server.h"
 #include "CVar.h"
+#include "Core/CObject.h"
 
 #include <Windows.h>
 #include <mmsystem.h>
@@ -32,6 +33,8 @@ int Common_Init(int argc, char** argv)
 	Cmd_Register("exit", Common_Exit_f);
 
 	CVar_Init();
+
+	Object_Init();
 
 	COM_Init(argc, argv);
 

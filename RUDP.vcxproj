@@ -129,6 +129,8 @@
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="Console.cpp" />
+    <ClCompile Include="Core\ClassInfo.cpp" />
+    <ClCompile Include="Core\CObject.cpp" />
     <ClCompile Include="CVar.cpp" />
     <ClCompile Include="FSocket.cpp" />
     <ClCompile Include="Log.cpp" />
@@ -138,12 +140,15 @@
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="SocketSystem.cpp" />
     <ClCompile Include="SV_Login.cpp" />
+    <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Console.h" />
+    <ClInclude Include="Core\ClassInfo.h" />
+    <ClInclude Include="Core\CObject.h" />
     <ClInclude Include="CVar.h" />
     <ClInclude Include="FSocket.h" />
     <ClInclude Include="IOBuffer.h" />
@@ -153,12 +158,10 @@
     <ClInclude Include="Protocol.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="SocketSystem.h" />
+    <ClInclude Include="Test.h" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Server.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Core\" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -11,12 +11,10 @@ std::map<std::string, CmdFuc> FuncMap;
 
 static void Cmd_LsCmd_f(CmdParam& Param)
 {
-    std::cout << std::endl;
-
     std::map<std::string, CmdFuc>::const_iterator it = FuncMap.begin();
     for (; it != FuncMap.end(); ++it)
     {
-        Log(LOG_CAT_LOG, it->first.c_str());
+        Log(LOG_CAT_LOG, "cmd: %s", it->first.c_str());
     }
 }
 
