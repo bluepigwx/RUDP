@@ -3,13 +3,30 @@
 #include "Core/CObject.h"
 
 
-class CTest : public CObject
+class CTestAA : public CObject
 {
-    DECLEAR_CLASS(CTest)
+    DECLEAR_CLASS(CTestAA)
 
 public:
     int aa;
 };
 
+
+class CTestBB : public CTestAA
+{
+    DECLEAR_CLASS(CTestBB)
+
+public:
+    int bb;
+};
+
+
+class CTestCC : public CTestBB
+{
+    DECLEAR_CLASS(CTestCC)
+
+public:
+    int cc;
+};
 
 void Test();

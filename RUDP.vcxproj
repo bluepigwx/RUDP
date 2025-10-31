@@ -148,6 +148,7 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="Core\ClassInfo.h" />
+    <ClInclude Include="Core\ClassInfoUtile.h" />
     <ClInclude Include="Core\CObject.h" />
     <ClInclude Include="CVar.h" />
     <ClInclude Include="FSocket.h" />

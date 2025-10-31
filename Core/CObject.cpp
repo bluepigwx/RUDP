@@ -2,8 +2,14 @@
 #include "../Log.h"
 #include "../Command.h"
 
+
+static void DefferInitCObjectClassInfo(ClassInfo* InClass)
+{
+}
+
+
 ClassInfo CObject::CObjectClassInfo;
-DeferInitClassInfo CObjectDeferInitClassInfo(&CObject::CObjectClassInfo, nullptr, "CObject", sizeof(CObject), CObject::CreateObject);
+DeferInitClassInfo CObjectDeferInitClassInfo(&CObject::CObjectClassInfo, nullptr, "CObject", sizeof(CObject), CObject::CreateObject, DefferInitCObjectClassInfo);
 
 
 bool CObject::IsA(ClassInfo* Class) const
@@ -34,7 +40,7 @@ static void Object_PrintAll_f(CmdParam& Param)
     while (tmp)
     {
         Log(LOG_CAT_LOG, "%s Size: %d Base: %s", tmp->Name, tmp->Size, tmp->BaseClass ? tmp->BaseClass->Name : "");
-        tmp = tmp->BaseClass;
+        tmp = tmp->Next;
     }
 }
 
@@ -42,5 +48,18 @@ static void Object_PrintAll_f(CmdParam& Param)
 void Object_Init()
 {
     Cmd_Register("lsclass", Object_PrintAll_f);
+}
+
+
+void Object_Finish()
+{
+    ClassInfo* tmp = CObject::CObjectClassInfo.First;
+    while (tmp)
+    {
+        ClassInfo* ToCleanup = tmp;
+        tmp = tmp->Next;
+        
+        ClassInfo_Cleanup(ToCleanup);
+    }
 }
 

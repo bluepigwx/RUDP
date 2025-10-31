@@ -10,6 +10,14 @@ int main(int argc, char** argv)
 {
     Common_Init(argc, argv);
 
+    /////////////////////////////////////
+    //Test Begin
+    
+    Test();
+    
+    //Test End
+    ////////////////////////////////////
+
     Common_Run();
 
     Common_Finish();

@@ -100,7 +100,7 @@ void Common_Run()
 
 void Common_Finish()
 {
-	
+	Object_Finish();
 }
 
 
