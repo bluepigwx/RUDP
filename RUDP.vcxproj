@@ -155,6 +155,7 @@
     <ClInclude Include="IOBuffer.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Net.h" />
+    <ClInclude Include="NetDriver\Replayout.h" />
     <ClInclude Include="Net_Chan.h" />
     <ClInclude Include="Protocol.h" />
     <ClInclude Include="Server.h" />
