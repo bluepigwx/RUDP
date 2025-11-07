@@ -3,12 +3,21 @@
 #include "Core/CObject.h"
 
 
+struct StructOne
+{
+    DECLEAR_STRUCT(StructOne)
+    
+    int StructOneInt;
+};
+
+
 class CTestAA : public CObject
 {
     DECLEAR_CLASS(CTestAA)
 
 public:
     int aa;
+    int aaAray[3];
 };
 
 

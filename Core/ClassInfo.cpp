@@ -19,6 +19,24 @@ void ClassInfo_Cleanup(ClassInfo* InClass)
 }
 
 
+bool ClassInfo::IsAClass(const ClassInfo* InBaseClass)
+{
+    ClassInfo* Temp = BaseClass;
+    while (Temp)
+    {
+        if (Temp == InBaseClass)
+        {
+            return true;
+        }
+        // else
+        Temp = Temp->BaseClass;
+    }
+
+    return false;
+}
+
+
+
 void ClassInfo::BuildupReplicationProps()
 {
     if (HasAnyFlags(ClassInfoFlag_InitReplicationData))

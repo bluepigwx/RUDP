@@ -6,17 +6,22 @@
 
 
 
-IMPLAMENT_CLASS_BEGIN(CTestAA, CObject)
+IMPLAMENT_STRUCT_BEGIN(StructOne)
+IMPLAMENT_STRUCT_END(StructOne)
+
+
+IMPLAMENT_CLASS_BEGIN(CTestAA)
     PROPERTY_DEFINE(CTestAA, aa, int, PropertyFlag_Net)
+    PROPERTY_ARRAY_DEFINE(CTestAA, aaAray, int, 3, PropertyFlag_Net)
 IMPLAMENT_CLASS_END(CTestAA, CObject)
 
 
-IMPLAMENT_CLASS_BEGIN(CTestBB, CTestAA)
+IMPLAMENT_CLASS_BEGIN(CTestBB)
     PROPERTY_DEFINE(CTestBB, bb, int, PropertyFlag_Net)
 IMPLAMENT_CLASS_END(CTestBB, CTestAA)
 
 
-IMPLAMENT_CLASS_BEGIN(CTestCC, CTestBB)
+IMPLAMENT_CLASS_BEGIN(CTestCC)
     PROPERTY_DEFINE(CTestCC, cc, int, PropertyFlag_Net)
 IMPLAMENT_CLASS_END(CTestCC, CTestBB)
 
@@ -29,6 +34,9 @@ CTestCC c;
 
 void Test1()
 {
+    ClassInfo* Info = a.GetClassInfo();
+    Info->BuildupReplicationProps();
+    
     ClassInfo* Temp = CObject::CObjectClassInfo.First;
     while (Temp)
     {

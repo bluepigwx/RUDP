@@ -15,6 +15,8 @@ enum PropertyType
     PropertyType_int64,
     PropertyType_float,
     PropertyType_double,
+    PropertyType_class, // 复合类型
+    PropertyType_End = PropertyType_class,
 };
 
 
@@ -24,6 +26,9 @@ enum PropertyFlag : int
     PropertyFlag_Net = 1 << 0,  // 用于网络复制的属性
 };
 
+
+class ClassInfo;
+class CObject;
 
 // 字段信息描述
 // 一个字段可以是一个原生类型如int, float
@@ -37,6 +42,7 @@ public:
     Name(InName),
     Type(InType),
     Flag(InFlag),
+    TypeClassInfo(nullptr),
     ArrayDim(0),
     RepIndex(0)
     {
@@ -49,6 +55,9 @@ public:
     const char* Name;
     PropertyType Type;
     PropertyFlag Flag;
+
+    // 如果是复合类型，再嵌套一个类型说明，如果是普通类型则为空
+    ClassInfo* TypeClassInfo;   
     
     // 指明这个属性字段带有有多少个连续的元素，
     // 如果是单一字段，那么就是1，int a 等价于 int c[1]
@@ -92,8 +101,6 @@ enum ClassInfoFlag : int
 };
 
 
-class CObject;
-class ClassInfo;
 
 typedef CObject* (*CreateObjectFunc)();
 typedef void (*InitClassProperty)(ClassInfo* InClass);
@@ -126,7 +133,7 @@ public:
     // 类型的默认工厂方法
     CreateObjectFunc CreateFuncPtr;
 
-    // 类型的字段属性
+    // 类型的字段属性，只保留一级字段
     std::vector<CProperty*> Properties;
     // 记录用于进行属性网络复制的字段
     std::vector<FRepRecord> ClassReps;
@@ -143,6 +150,8 @@ public:
     
     // 构建专用于网络复制的属性列表，就是将Property数组展开为FRepRecord数组
     void BuildupReplicationProps();
+
+    bool IsAClass(const ClassInfo* InBaseClass);
 };
 
 
@@ -170,26 +179,41 @@ struct DeferInitClassInfo
     (&ThisClass::ThisClass##ClassInfo)
 
 
-// 运行时类型获取接口定义
-#define DECLEAR_CLASS(ThisClass) \
+#define GET_OBJECTCLASSINFO(ObjectPtr) \
+    ((ObjectPtr)->GetClassInfo());
+
+
+
+// 动态创建支持的接口
+#define DECLEAR_DYNAMIC(ThisClass) \
+    static CObject* CreateObject() \
+    { \
+        return new (ThisClass); \
+    }\
+    virtual ClassInfo* GetClassInfo() const override \
+    {   \
+        return ThisClass::StaticClass(); \
+    }
+
+
+#define DECLEAR_STRUCT(ThisClass) \
     public: \
     static ClassInfo ThisClass##ClassInfo; \
     static ClassInfo* StaticClass() \
     { \
         return &ThisClass##ClassInfo; \
     } \
-    virtual ClassInfo* GetClassInfo() const override \
-    {   \
-        return ThisClass::StaticClass(); \
-    } \
-    static CObject* CreateObject() \
-    { \
-        return new ThisClass; \
-    }
+    
+
+
+// 运行时类型获取接口定义
+#define DECLEAR_CLASS(ThisClass) \
+    DECLEAR_STRUCT(ThisClass) \
+    DECLEAR_DYNAMIC(ThisClass)
 
 
 // 运行时类型构建
-#define IMPLAMENT_CLASS_BEGIN(ThisClass, BaseClass) \
+#define IMPLAMENT_CLASS_BEGIN(ThisClass) \
     static void DefferInit_##ThisClass##ClassInfo(ClassInfo* InClass) \
     {
 
@@ -199,16 +223,38 @@ struct DeferInitClassInfo
         FieldName##FieldType->ArrayDim = 1; \
         InClass->Properties.push_back(FieldName##FieldType);
 
-// 固定长度数组类型
-#define PROPERTY_ARRAY_DEFINE(ThisClass, FieldName, ElementType, FieldFlag, ArraySize) \
+// 固定长度普通类型数组
+#define PROPERTY_ARRAY_DEFINE(ThisClass, FieldName, ElementType, ArraySize, FieldFlag) \
         CProperty* FieldName##FieldType = new CProperty(offsetof(ThisClass, FieldName), sizeof(ThisClass::FieldName), #FieldName, PropertyType_##ElementType, FieldFlag);\
         FieldName##FieldType->ArrayDim = ArraySize; \
         InClass->Properties.push_back(FieldName##FieldType);
+
+// 结构体或类类型即复合类型定义
+#define PROPERTY_CLASS_DEFINE(ThisClass, FieldName, FieldType, FieldFlag) \
+        CProperty* FieldName##PropertyType_class = new CProperty(offsetof(ThisClass, FieldName), sizeof(ThisClass::FieldName), #FieldName, PropertyType_class, FieldFlag); \
+        FieldName##PropertyType_class->ArrayDim = 1; \
+        FieldName##PropertyType_class->TypeClassInfo = GET_CLASSINFO(FieldType); \
+        InClass->Properties.push_back(FieldName##PropertyType_class);
+
+// 复核类型数组定义
+#define PROPERTY_CLASS_ARRAY_DEFINE(ThisClass, FieldName, FieldType, FieldFlag, ArraySize) \
+        CProperty* FieldName##PropertyType_class_array = new CProperty(offsetof(ThisClass, FieldName), sizeof(ThisClass::FieldName), #FieldName, PropertyType_class, FieldFlag); \
+        FieldName##PropertyType_class_array->ArrayDim = ArraySize; \
+        FieldName##PropertyType_class->TypeClassInfo = GET_CLASSINFO(FieldType); \
+        InClass->Propertes.push_back(FieldName##PropertyType_class_array);
+        
 
 #define IMPLAMENT_CLASS_END(ThisClass, BaseClass) \
     } \
     ClassInfo ThisClass::ThisClass##ClassInfo; \
     static DeferInitClassInfo ThisClass##DeferInitClassInfo(&ThisClass::ThisClass##ClassInfo, GET_CLASSINFO(BaseClass), #ThisClass, sizeof(ThisClass), ThisClass::CreateObject, DefferInit_##ThisClass##ClassInfo);
+
+
+#define IMPLAMENT_STRUCT_BEGIN(ThisClass) IMPLAMENT_CLASS_BEGIN(ThisClass) 
+#define IMPLAMENT_STRUCT_END(ThisClass) \
+    } \
+    ClassInfo ThisClass::ThisClass##ClassInfo; \
+    static DeferInitClassInfo ThisClass##DeferInitClassInfo(&ThisClass::ThisClass##ClassInfo, nullptr, #ThisClass, sizeof(ThisClass), nullptr, DefferInit_##ThisClass##ClassInfo);
 
 
 
