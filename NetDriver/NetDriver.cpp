@@ -3,14 +3,14 @@
 #include <assert.h>
 
 #include "Channel.h"
+#include "NetConnection.h"
 #include "../Common/Log.h"
 #include "../Engine/GlobalNames.h"
+#include "Replayout.h"
 
 
 IMPLAMENT_CLASS_BEGIN(CNetDriver)
 IMPLAMENT_CLASS_END(CNetDriver, CObject)
-
-
 
 
 int CNetDriver::Init()
@@ -28,9 +28,16 @@ int CNetDriver::Init()
 }
 
 
-
 CChannel* CNetDriver::CreateChannel(std::string& Name)
 {
+    ChannelDefine::const_iterator it = ChannelConfig.find(Name);
+    if (it == ChannelConfig.end())
+    {
+        // 不被支持的Channel类型
+        Log(LOG_CAT_ERR, "CNetDriver::CreateChannel Invalide Channel class name %s", Name.c_str());
+        return nullptr;
+    }
+    
     CChannel* Ret = nullptr;
     
     ChannelQueue& Queue = ClassChannelPool[Name];
@@ -38,6 +45,7 @@ CChannel* CNetDriver::CreateChannel(std::string& Name)
     {
         Ret = Queue.front();
         assert(Ret->InUse == false);
+        assert(Ret->Index == -1);
         
         Ret->InUse = true;
         Queue.pop();
@@ -47,15 +55,10 @@ CChannel* CNetDriver::CreateChannel(std::string& Name)
 
     if (Ret == nullptr)
     {
-        ChannelDefine::const_iterator it = ChannelConfig.find(Name);
-        if (it == ChannelConfig.end())
-        {
-            Log(LOG_CAT_ERR, "CNetDriver::CreateChannel Invalide Channel class name %s", Name.c_str());
-            return nullptr;
-        }
-
         const FChannelDefine& Chdef = it->second;
-        if (Chdef.Class->IsAClass(CChannel::StaticClass()))
+        Ret = NewObject<CChannel>(Chdef.Class);
+        assert(Ret != nullptr);
+        if (Ret)
         {
             Ret = dynamic_cast<CChannel*>(Chdef.Class->CreateFuncPtr());
             Ret->Name = Name;
@@ -88,7 +91,163 @@ void CNetDriver::DestroyChannel(CChannel* InCh)
     }
 
     ChannelQueue& Queue = it->second;
+    InCh->Cleanup();
     InCh->InUse = false;
+    InCh->Index = -1;
     Queue.push(InCh);
 }
+
+
+void CNetDriver::AddClientConnection(CNetConnection* ClientConn)
+{
+    NetAddr& addr = ClientConn->RemoteAddr;
+
+    ClientConnectionMap::const_iterator it = ClientConnections.find(addr);
+    if (it != ClientConnections.end())
+    {
+        Log(LOG_CAT_ERR, "dupicated addr %s", Net_NetAdrToString(&addr));
+        return;
+    }
+    
+    ClientConnections[addr] = ClientConn;
+    Log(LOG_CAT_LOG, "insert net client connection %s", Net_NetAdrToString(&addr));
+}
+
+
+int32 CNetDriver::ServerReplicateActors(float DeltaSeconds)
+{
+    static NetworkObjectList ConsiderList;
+    ConsiderList.clear();
+
+    int Ret = ServerReplicateActors_BuildConsiderList(ConsiderList, DeltaSeconds);
+    if (Ret <= 0)
+    {
+        return 0;
+    }
+
+    ClientConnectionMap::iterator it = ClientConnections.begin();
+    for (; it != ClientConnections.end(); ++it)
+    {
+        static PrioritzeObjectList PrioritzeList;
+        PrioritzeList.clear();
+
+        // 排序所有与本连接相关的Actor
+        ServerReplicateActors_PrioritzeActors(it->second, ConsiderList, PrioritzeList);
+        // 真正的复制每个相关Actor到Connection
+        ServerReplicateActors_ProcessPrioritze(it->second, PrioritzeList);
+    }
+    
+    return 0;
+}
+
+
+FRepLayout* CNetDriver::GetObjectReplayout(ClassInfo* Class)
+{
+    ObjectReplayoutMap::iterator it = ReplayoutMap.find(Class);
+    if (it != ReplayoutMap.end())
+    {
+        return it->second;
+    }
+
+    FRepLayout* NewReplayout = new FRepLayout();
+    NewReplayout->InitFromClass(Class);
+
+    ReplayoutMap[Class] = NewReplayout;
+
+    return NewReplayout;
+}
+
+
+
+int32 CNetDriver::ServerReplicateActors_BuildConsiderList(NetworkObjectList& OutObjList, float DeltaSeconds)
+{
+    int32 Size = 0;
+
+    NetworkObjectList& ActiveList = GetActiveObjectList();
+    if (ActiveList.empty())
+    {
+        return Size;
+    }
+
+    NetworkObjectList::iterator it = ActiveList.begin();
+    for (; it!=ActiveList.end(); ++it)
+    {
+        OutObjList.insert(*it);
+        ++Size;
+    }
+
+    return Size;
+}
+
+
+
+int32 CNetDriver::ServerReplicateActors_PrioritzeActors(CNetConnection* Conn, NetworkObjectList& ObjList, PrioritzeObjectList& OutList)
+{
+    int Size = 0;
+    if (ObjList.empty())
+    {
+        return 0;
+    }
+
+    NetworkObjectList::iterator it = ObjList.begin();
+    for (; it!=ObjList.end(); ++it)
+    {
+        OutList.push_back(*it);
+        ++Size;
+    }
+    
+    return Size;
+}
+
+
+int32 CNetDriver::ServerReplicateActors_ProcessPrioritze(CNetConnection* Conn, PrioritzeObjectList& ObjList)
+{
+    if (ObjList.empty())
+    {
+        return 0;
+    }
+
+    int32 ProcessCnt = 0;
+
+    PrioritzeObjectList::iterator it = ObjList.begin();
+    for (; it!=ObjList.end(); ++it)
+    {
+        FNetworkObjectInfo* ActorInfo = (*it);
+        CActor* Actor = ActorInfo->Actor;
+        if (!Actor)
+        {
+            continue;
+        }
+
+        CActorChannel* ActorChannel = Conn->GetActorChannel(Actor);
+        if (ActorChannel == nullptr)
+        {
+            // 如果发现并没有与Conn相关的Channel，这里创建一个
+            ActorChannel = dynamic_cast<CActorChannel*>(Conn->CreateChannel(NAME_Actor));
+            if (ActorChannel)
+            {
+                ActorChannel->SetChannelActor(Actor);
+            }
+        }
+
+        if (ActorChannel)
+        {
+            ActorChannel->ReplicateActor();
+
+            ++ProcessCnt;
+        }
+    }
+    
+    return ProcessCnt;
+}
+
+
+
+
+
+void CNetDriver::TickFlush(float DeltaSeconds)
+{
+    ServerReplicateActors(DeltaSeconds);
+}
+
 

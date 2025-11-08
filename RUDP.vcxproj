@@ -878,9 +878,11 @@
       <SDLCheck>true</SDLCheck>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="NetDriver\IPNetConnection.cpp" />
     <ClCompile Include="NetDriver\NetConnection.cpp" />
     <ClCompile Include="NetDriver\NetDriver.cpp" />
     <ClCompile Include="NetDriver\NetworkObjectList.cpp" />
+    <ClCompile Include="NetDriver\ObjectReplicator.cpp" />
     <ClCompile Include="NetDriver\Replayout.cpp" />
     <ClCompile Include="NetDriver\SocketSystem.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -1108,6 +1110,7 @@
       <SDLCheck>true</SDLCheck>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="Test\TestNetDriver.cpp" />
     <ClCompile Include="Test\Test.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -1198,20 +1201,22 @@
     <ClInclude Include="Core\ClassInfo.h" />
     <ClInclude Include="Core\ClassInfoUtile.h" />
     <ClInclude Include="Core\CObject.h" />
+    <ClInclude Include="Core\GenericPlatform.h" />
+    <ClInclude Include="Core\Typedef.h" />
     <ClInclude Include="Engine\Actor.h" />
     <ClInclude Include="Engine\GlobalNames.h" />
     <ClInclude Include="NetDriver\Channel.h" />
     <ClInclude Include="NetDriver\FSocket.h" />
+    <ClInclude Include="NetDriver\IPNetConnection.h" />
     <ClInclude Include="NetDriver\NetConnection.h" />
     <ClInclude Include="NetDriver\NetDriver.h" />
     <ClInclude Include="NetDriver\NetworkObjectList.h" />
+    <ClInclude Include="NetDriver\ObjectReplicator.h" />
     <ClInclude Include="NetDriver\Replayout.h" />
     <ClInclude Include="NetDriver\SocketSystem.h" />
     <ClInclude Include="Server\Server.h" />
+    <ClInclude Include="Test\TestNetDriver.h" />
     <ClInclude Include="Test\Test.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Server.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DevDoc\" />

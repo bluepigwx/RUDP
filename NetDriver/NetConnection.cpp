@@ -1,5 +1,10 @@
 #include "NetConnection.h"
+
+#include <cassert>
+
 #include "NetDriver.h"
+#include "../Common/Log.h"
+#include "../Engine/Actor.h"
 
 
 IMPLAMENT_CLASS_BEGIN(CNetConnection)
@@ -52,4 +57,35 @@ CChannel* CNetConnection::CreateChannel(std::string& Name)
 
     return NewChannel;
 }
+
+
+void CNetConnection::AddActorChannel(CActor* InActor, CChannel* InCh)
+{
+    ActorChannelMap::const_iterator it = ActorChannels.find(InActor);
+    if (it != ActorChannels.end())
+    {
+        assert(0);
+        Log(LOG_CAT_ERR, "duplicate actor");
+        return;
+    }
+
+    if (InCh->IsA(CActorChannel::StaticClass()))
+    {
+        ActorChannels[InActor] = dynamic_cast<CActorChannel*>(InCh);    
+    }
+}
+
+
+CActorChannel* CNetConnection::GetActorChannel(CActor* InActor)
+{
+    ActorChannelMap::iterator it = ActorChannels.find(InActor);
+    if (it != ActorChannels.end())
+    {
+        return it->second;
+    }
+
+    return nullptr;
+}
+
+
 

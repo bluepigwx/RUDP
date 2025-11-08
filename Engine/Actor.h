@@ -9,4 +9,13 @@
 class CActor : public CObject
 {
     DECLEAR_CLASS(CActor)
+
+    CActor():
+    Replicated(false)
+    {
+        
+    }
+    
+public:
+    bool Replicated;
 };

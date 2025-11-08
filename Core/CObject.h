@@ -33,9 +33,14 @@ public:
 
 
 template<class T>
-T* NewObject()
+T* NewObject(ClassInfo* InClass)
 {
-    return (T::CreateObject);
+    // 确保InClass一定是T的子类
+    if (InClass->IsAClass(T::StaticClass()))
+    {
+        return dynamic_cast<T*>(InClass->CreateFuncPtr());
+    }
+    return nullptr;
 }
 
 

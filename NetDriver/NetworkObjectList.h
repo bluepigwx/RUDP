@@ -1,7 +1,9 @@
 ﻿#pragma once
 #include <map>
+#include <set>
+#include <vector>
 
-
+class CNetDriver;
 class CActor;
 
 
@@ -26,9 +28,13 @@ public:
 };
 
 
+typedef std::set<FNetworkObjectInfo*> NetworkObjectList;
+typedef std::vector<FNetworkObjectInfo*> PrioritzeObjectList;
+
 
 class FNetworkObjectList
 {
+    friend CNetDriver;
 public:
     FNetworkObjectInfo* FindOrAdd(CActor* InActor);
 
@@ -39,5 +45,5 @@ private:
     std::map<CActor*, FNetworkObjectInfo*> AllObjectList;
 
     // 激活的可复制对象
-    std::map<CActor*, FNetworkObjectInfo*> ActiveObjectList;
+    NetworkObjectList ActiveObjectList;
 };

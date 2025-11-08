@@ -1,6 +1,9 @@
 #include <WinSock2.h>
 #include <ws2tcpip.h> 
 #include "Net.h"
+
+#include <assert.h>
+
 #include "IOBuffer.h"
 
 #include <iostream>
@@ -169,7 +172,7 @@ int Net_NetAdrToSockAdr(NetAddr* nadr, struct sockaddr* sadr)
 
 
 
-bool Net_CompareNetAdr(NetAddr* ladr, NetAddr* radr)
+bool Net_CompareNetAdr(const NetAddr* ladr, const NetAddr* radr)
 {
     if (!ladr || ladr != radr)
     {
@@ -262,3 +265,20 @@ bool Net_Get(int sock, IBuffer2k* buff, NetAddr* from)
 }
 
 
+const char* Net_NetAdrToString(const NetAddr* nadr)
+{
+	static char AddrBuffer[64];
+
+	sprintf_s(AddrBuffer, "%s:%d.%d.%d.%d:%d", nadr->AddrType==ADDR_TYPE_IP? "remote" : "loopback",
+		nadr->ip[0], nadr->ip[1], nadr->ip[2], nadr->ip[3],
+		ntohs(nadr->port));
+
+	return AddrBuffer;
+	
+}
+
+const char* Net_SockAdtToString(const struct sockaddr* sadr)
+{
+	assert(0);
+	return "0.0.0.0:0";
+}

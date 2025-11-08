@@ -1,6 +1,7 @@
 ﻿#pragma once
-#include <vector>
 
+#include <vector>
+#include "../Core/Typedef.h"
 
 // 类运行时基本辅助信息
 

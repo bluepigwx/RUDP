@@ -1,10 +1,16 @@
 ﻿#pragma once
 
+#include <map>
+
 #include "../Core/CObject.h"
 #include <string>
 
+#include "ObjectReplicator.h"
+
 class CNetDriver;
 class CNetConnection;
+class CActor;
+class FObjectReplicator;
 
 // 特定网络对象的传输层
 class CChannel : public CObject
@@ -20,9 +26,10 @@ public:
     {
         
     }
-    
 
     int Init(CNetConnection* InConnection, int ChIdx);
+
+    virtual void Cleanup() {}
 
 private:
     std::string Name;
@@ -30,8 +37,9 @@ private:
     bool InUse;
     // 这个下标用来和客户端的Channel一一对应
     // 服务器只要下发这个下标即可
-    int Index;
+    int32 Index;
 
+protected:
     CNetConnection* NetConnection;
 };
 
@@ -41,4 +49,30 @@ private:
 class CActorChannel : public CChannel
 {
     DECLEAR_CLASS(CActorChannel)
+
+public:
+    CActorChannel() :
+    Actor(nullptr),
+    ActorReplicator(nullptr)
+    {
+        
+    }
+    
+    void SetChannelActor(CActor* InActor);
+
+    void ReplicateActor();
+
+    virtual void Cleanup() override;
+
+private:
+    FObjectReplicator* FindOrCreateReplicator(CObject* InObject);
+
+private:
+    CActor* Actor;
+
+    // Actor自己的Replicator
+    FObjectReplicator* ActorReplicator;
+    // Actor以及自己所有组件的
+    typedef std::map<CObject*, FObjectReplicator*> ObjectReplicatorMap;
+    ObjectReplicatorMap ReplicateMap;
 };

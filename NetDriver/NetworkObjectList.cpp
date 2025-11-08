@@ -13,6 +13,8 @@ FNetworkObjectInfo* FNetworkObjectList::FindOrAdd(CActor* InActor)
     {
         FNetworkObjectInfo* ObjInfo = new FNetworkObjectInfo(InActor);
         AllObjectList.emplace(InActor, ObjInfo);
+        ActiveObjectList.insert(ObjInfo);
+        
         return ObjInfo;
     }
 
@@ -31,6 +33,7 @@ bool FNetworkObjectList::Remove(CActor* InActor)
     std::map<CActor*, FNetworkObjectInfo*>::iterator it = AllObjectList.find(InActor);
     if (it != AllObjectList.end())
     {
+        ActiveObjectList.erase(it->second);
         AllObjectList.erase(it);
         return true;
     }
