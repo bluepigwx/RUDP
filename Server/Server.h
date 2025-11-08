@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Net_Chan.h"
+#include "../Common/Net_Chan.h"
 
 // 服务端上的客户端实体
 struct SvClient

@@ -1,10 +1,10 @@
 ﻿#include "Client.h"
-#include "Command.h"
-#include "CVar.h"
-#include "FSocket.h"
-#include "Net.h"
-#include "Protocol.h"
-#include "Log.h"
+#include "../Common/Command.h"
+#include "../Common/CVar.h"
+#include "../NetDriver/FSocket.h"
+#include "../Common/Net.h"
+#include "../Common/Protocol.h"
+#include "../Common/Log.h"
 
 // 完成客户端登陆握手
 

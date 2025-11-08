@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Core/CObject.h"
+#include "../Core/CObject.h"
 
 
 struct StructOne

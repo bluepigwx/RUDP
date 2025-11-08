@@ -2,10 +2,10 @@
 
 
 #include "Server.h"
-#include "Common.h"
-#include "FSocket.h"
-#include "Net.h"
-#include "Protocol.h"
+#include "../Common/Common.h"
+#include "../NetDriver/FSocket.h"
+#include "../Common/Net.h"
+#include "../Common/Protocol.h"
 
 ServerStatic svs;
 

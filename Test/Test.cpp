@@ -1,7 +1,7 @@
 ﻿#include "Test.h"
-#include "Net.h"
-#include "Log.h"
-#include "Core/ClassInfoUtile.h"
+#include "../Common/Net.h"
+#include "../Common/Log.h"
+#include "../Core/ClassInfoUtile.h"
 #include <cstddef>  // for offsetof
 
 

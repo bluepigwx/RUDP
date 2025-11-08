@@ -3,8 +3,8 @@
 // 客户端主流程控制
 
 
-#include "Net_Chan.h"
-#include "Common.h"
+#include "../Common/Net_Chan.h"
+#include "../Common/Common.h"
 
 
 // 链接状态

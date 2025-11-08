@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 
-#include "Net.h"
+#include "../Common/Net.h"
 
 
 class FSocket;

@@ -1,7 +1,7 @@
 ﻿
 #include "SocketSystem.h"
 #include "FSocket.h"
-#include "Net.h"
+#include "../Common/Net.h"
 
 int SocketSystem::Init()
 {

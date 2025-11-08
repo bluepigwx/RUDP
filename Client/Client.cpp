@@ -1,5 +1,5 @@
 #include "Client.h"
-#include "Command.h"
+#include "../Common/Command.h"
 
 ClientStatic cls;
 

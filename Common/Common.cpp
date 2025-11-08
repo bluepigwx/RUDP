@@ -1,11 +1,11 @@
 ﻿#include "Common.h"
 #include "Console.h"
-#include "Client.h"
-#include "FSocket.h"
+#include "../Client/Client.h"
+#include "../NetDriver/FSocket.h"
 #include "Command.h"
-#include "Server.h"
+#include "../Server/Server.h"
 #include "CVar.h"
-#include "Core/CObject.h"
+#include "../Core/CObject.h"
 
 #include <Windows.h>
 #include <mmsystem.h>

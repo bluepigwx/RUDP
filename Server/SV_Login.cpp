@@ -1,6 +1,6 @@
-﻿#include "Protocol.h"
-#include "IOBuffer.h"
-#include "Net.h"
+﻿#include "../Common/Protocol.h"
+#include "../Common/IOBuffer.h"
+#include "../Common/Net.h"
 #include "Server.h"
 
 // 服务端处理登陆握手协议
