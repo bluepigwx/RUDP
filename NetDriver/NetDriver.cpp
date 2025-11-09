@@ -141,7 +141,7 @@ int32 CNetDriver::ServerReplicateActors(float DeltaSeconds)
 }
 
 
-FRepLayout* CNetDriver::GetObjectReplayout(ClassInfo* Class)
+FRepLayout* CNetDriver::GetObjectClassReplayout(ClassInfo* Class)
 {
     ObjectReplayoutMap::iterator it = ReplayoutMap.find(Class);
     if (it != ReplayoutMap.end())

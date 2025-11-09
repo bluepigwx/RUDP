@@ -70,5 +70,15 @@ FObjectReplicator* CActorChannel::FindOrCreateReplicator(CObject* InObject)
 void CActorChannel::Cleanup()
 {
     Actor = nullptr;
+    
+    // 清理自己的Replicator
+    ObjectReplicatorMap::iterator it = ReplicateMap.begin();
+    for (; it != ReplicateMap.end(); ++it)
+    {
+        delete it->second;
+    }
+    ReplicateMap.clear();
+
+    ActorReplicator = nullptr;
 }
 

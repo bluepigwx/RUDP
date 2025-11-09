@@ -47,7 +47,7 @@ public:
 
     NetworkObjectList& GetActiveObjectList() { return NetObjList.ActiveObjectList; }
 
-    FRepLayout* GetObjectReplayout(ClassInfo* Class);
+    FRepLayout* GetObjectClassReplayout(ClassInfo* Class);
 
 protected:
     //挑选出本帧需要进行复制的Actor
