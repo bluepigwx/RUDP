@@ -8,7 +8,7 @@
 
 class CActor : public CObject
 {
-    DECLEAR_CLASS(CActor)
+    DECLEAR_CLASS(CActor, CObject)
 
     CActor():
     Replicated(false)

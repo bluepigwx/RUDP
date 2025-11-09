@@ -17,7 +17,7 @@ class CChannel : public CObject
 {
     friend CNetDriver;
     
-    DECLEAR_CLASS(CChannel)
+    DECLEAR_CLASS(CChannel, CObject)
 public:
     CChannel():
     NetConnection(nullptr),
@@ -48,7 +48,7 @@ protected:
 // Actor对象的网络传输层
 class CActorChannel : public CChannel
 {
-    DECLEAR_CLASS(CActorChannel)
+    DECLEAR_CLASS(CActorChannel, CChannel)
 
 public:
     CActorChannel() :

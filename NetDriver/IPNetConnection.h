@@ -4,7 +4,7 @@
 
 class CIPNetConnection : public CNetConnection
 {
-    DECLEAR_CLASS(CIPNetConnection)
+    DECLEAR_CLASS(CIPNetConnection, CNetConnection)
 public:
     
 };

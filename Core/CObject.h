@@ -44,6 +44,12 @@ T* NewObject(ClassInfo* InClass)
 }
 
 
+inline void DestroyObject(CObject* InObject)
+{
+    delete InObject;
+}
+
+
 
 
 void Object_Init();

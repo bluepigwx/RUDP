@@ -16,7 +16,7 @@ class CNetConnection : public CObject
 {
     friend class CNetDriver;
     
-    DECLEAR_CLASS(CNetConnection)
+    DECLEAR_CLASS(CNetConnection, CObject)
     
 public:
     CNetConnection():

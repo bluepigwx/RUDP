@@ -1,4 +1,5 @@
 #include "NetworkObjectList.h"
+#include "../Engine/Actor.h"
 #include "../Common/Log.h"
 
 FNetworkObjectInfo* FNetworkObjectList::FindOrAdd(CActor* InActor)

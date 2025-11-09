@@ -12,12 +12,12 @@
 #include <iostream>
 
 #include "Log.h"
-
+#include "../Engine/Launcher.h"
 
 
 #pragma comment(lib, "winmm.lib")
 
-#define MAX_FPS 60.0f	// 控制每秒最大帧率
+#define MAX_FPS 1.0f	// 控制每秒最大帧率
 
 bool Exit = false;
 
@@ -30,15 +30,13 @@ static void Common_Exit_f(CmdParam& Param)
 
 int Common_Init(int argc, char** argv)
 {
-	Cmd_Register("exit", Common_Exit_f);
-
+	COM_Init(argc, argv);
+	
 	CVar_Init();
 
-	Object_Init();
-
-	COM_Init(argc, argv);
-
 	Cmd_Init();
+
+	Object_Init();
 	
 	Con_Init();
 
@@ -47,6 +45,10 @@ int Common_Init(int argc, char** argv)
 	SV_Init();
 
 	CL_Init();
+
+	Launcher::Inst().Init();
+
+	Cmd_Register("exit", Common_Exit_f);
 	
 	return 0;
 }
@@ -60,6 +62,8 @@ static void Common_Frame(int Msec)
 	SV_Frame(Msec);
 
 	CL_Frame(Msec);
+
+	GEngine->Init();
 
 	//Log(LOG_CAT_LOG, "Msec %d", Msec);
 	
@@ -101,6 +105,8 @@ void Common_Run()
 void Common_Finish()
 {
 	Object_Finish();
+
+	Launcher::Inst().Finit();
 }
 
 

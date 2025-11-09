@@ -74,7 +74,7 @@ CChannel* CNetDriver::CreateChannel(std::string& Name)
 }
 
 
-void CNetDriver::DestroyChannel(CChannel* InCh)
+void CNetDriver::DestroyChannel(CChannel* InCh, bool Reuse)
 {
     if (nullptr == InCh)
     {
@@ -90,11 +90,20 @@ void CNetDriver::DestroyChannel(CChannel* InCh)
         return;
     }
 
-    ChannelQueue& Queue = it->second;
-    InCh->Cleanup();
-    InCh->InUse = false;
-    InCh->Index = -1;
-    Queue.push(InCh);
+    if (Reuse)
+    {
+        ChannelQueue& Queue = it->second;
+        InCh->Cleanup();
+        InCh->InUse = false;
+        InCh->Index = -1;
+        Queue.push(InCh);
+    }
+    else
+    {
+        InCh->Cleanup();
+        DestroyObject(InCh);
+        InCh = nullptr;
+    }
 }
 
 
@@ -242,12 +251,38 @@ int32 CNetDriver::ServerReplicateActors_ProcessPrioritze(CNetConnection* Conn, P
 }
 
 
-
+void CNetDriver::Tick(float DeltaSeconds)
+{
+    TickFlush(DeltaSeconds);
+}
 
 
 void CNetDriver::TickFlush(float DeltaSeconds)
 {
     ServerReplicateActors(DeltaSeconds);
+}
+
+
+void CNetDriver::Finit()
+{
+    while (!ChannelPool.empty())
+    {
+        CChannel* Ch = ChannelPool.front();
+        ChannelPool.pop();
+        
+        DestroyChannel(Ch, false);
+        Ch = nullptr;
+    }
+
+    
+    ObjectReplayoutMap::iterator it = ReplayoutMap.begin();
+    for (; it!=ReplayoutMap.end(); ++it)
+    {
+        FRepLayout* Replayout = it->second;
+        delete Replayout;
+        Replayout = nullptr;
+    }
+    ReplayoutMap.clear();
 }
 
 

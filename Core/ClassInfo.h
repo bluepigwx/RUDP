@@ -203,14 +203,15 @@ struct DeferInitClassInfo
     static ClassInfo* StaticClass() \
     { \
         return &ThisClass##ClassInfo; \
-    } \
+    }
     
 
 
 // 运行时类型获取接口定义
-#define DECLEAR_CLASS(ThisClass) \
+#define DECLEAR_CLASS(ThisClass, BaseClass) \
     DECLEAR_STRUCT(ThisClass) \
-    DECLEAR_DYNAMIC(ThisClass)
+    DECLEAR_DYNAMIC(ThisClass) \
+    typedef BaseClass Super;
 
 
 // 运行时类型构建

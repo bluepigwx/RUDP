@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../Core/CObject.h"
+#include "../Engine/Actor.h"
 
 
 struct StructOne
@@ -11,9 +12,9 @@ struct StructOne
 };
 
 
-class CTestAA : public CObject
+class CTestAA : public CActor
 {
-    DECLEAR_CLASS(CTestAA)
+    DECLEAR_CLASS(CTestAA, CActor)
 
 public:
     int aa;
@@ -23,7 +24,7 @@ public:
 
 class CTestBB : public CTestAA
 {
-    DECLEAR_CLASS(CTestBB)
+    DECLEAR_CLASS(CTestBB, CTestAA)
 
 public:
     int bb;
@@ -32,7 +33,7 @@ public:
 
 class CTestCC : public CTestBB
 {
-    DECLEAR_CLASS(CTestCC)
+    DECLEAR_CLASS(CTestCC, CTestBB)
 
 public:
     int cc;

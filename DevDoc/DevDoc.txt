@@ -1,0 +1,2 @@
+Launcher里面配置好Engine，初始化全局引擎变量
+Engine里面配置好各种自己要驱动的组件

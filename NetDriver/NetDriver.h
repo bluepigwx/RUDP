@@ -6,9 +6,8 @@
 
 #include "../Core/CObject.h"
 #include "NetworkObjectList.h"
+#include "../Common/Net.h"
 
-
-struct NetAddr;
 class CChannel;
 class CNetConnection;
 class FRepLayout;
@@ -24,18 +23,22 @@ struct FChannelDefine
 
 class CNetDriver : public CObject
 {
-    DECLEAR_CLASS(CNetDriver)
+    DECLEAR_CLASS(CNetDriver, CObject)
 
 public:
 
     virtual int Init();
+
+    virtual void Finit();
+
+    void Tick(float DeltaSeconds);
     
     // 往客户端推送数据
     void TickFlush(float DeltaSeconds);
 
     CChannel* CreateChannel(std::string& Name);
 
-    void DestroyChannel(CChannel* InCh);
+    void DestroyChannel(CChannel* InCh, bool Reuse = true);
 
     void AddClientConnection(CNetConnection* ClientConn);
 
@@ -45,11 +48,14 @@ public:
     // 将Actor复制到Connection的连接中
     virtual int32 ServerReplicateActors(float DeltaSeconds);
 
-    NetworkObjectList& GetActiveObjectList() { return NetObjList.ActiveObjectList; }
-
     FRepLayout* GetObjectClassReplayout(ClassInfo* Class);
 
 protected:
+    
+    NetworkObjectList& GetActiveObjectList() { return NetObjList.ActiveObjectList; }
+
+    FNetworkObjectList& GetNetworkObjectList() { return NetObjList; }
+    
     //挑选出本帧需要进行复制的Actor
     int32 ServerReplicateActors_BuildConsiderList(NetworkObjectList& OutObjList, float DeltaSeconds);
     // 将筛选出来的Actor按相关性和优先级进行排序
