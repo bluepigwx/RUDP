@@ -1,4 +1,7 @@
 #include "TestNetDriver.h"
+
+#include <assert.h>
+
 #include "Test.h"
 #include "../NetDriver/IPNetConnection.h"
 
@@ -13,11 +16,11 @@ int CTestNetDriver::Init()
     Super::Init();
     
     CIPNetConnection* Conn = NewObject<CIPNetConnection>(CIPNetConnection::StaticClass());
+    assert(Conn);
+    Conn->Init(this);
     AddClientConnection(Conn);
 
-
     CTestAA* AA = NewObject<CTestAA>(CTestAA::StaticClass());
-
     GetNetworkObjectList().FindOrAdd(AA);
     
     return 0;

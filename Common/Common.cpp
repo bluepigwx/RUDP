@@ -63,7 +63,7 @@ static void Common_Frame(int Msec)
 
 	CL_Frame(Msec);
 
-	GEngine->Init();
+	GEngine->Tick(0);
 
 	//Log(LOG_CAT_LOG, "Msec %d", Msec);
 	

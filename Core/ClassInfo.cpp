@@ -21,6 +21,11 @@ void ClassInfo_Cleanup(ClassInfo* InClass)
 
 bool ClassInfo::IsAClass(const ClassInfo* InBaseClass)
 {
+    if (this == InBaseClass)
+    {
+        return true;
+    }
+    
     ClassInfo* Temp = BaseClass;
     while (Temp)
     {
