@@ -28,8 +28,8 @@ static int InitProperty(FSharedInitProperty& Shared, FStackInitProperty Stack);
 
 static int AddParentProperty(std::vector<FRepParentCmd>& InParents, CProperty* InProperty, int InIndex)
 {
-    InParents.emplace_back(FRepParentCmd(InProperty, InIndex));
-    return (int)InParents.size();
+    InParents.emplace_back(InProperty, InIndex);
+    return (int)InParents.size() - 1;
 }
 
 
