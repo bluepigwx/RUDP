@@ -1,8 +1,11 @@
 ﻿#pragma once
 #include <vector>
 
+#include "../Core/Typedef.h"
+
 class CProperty;
 class ClassInfo;
+class FRepChangedPropertyTracker;
 
 /*
  * FRepLayout有几项职责
@@ -75,14 +78,66 @@ public:
 };
 
 
+
+// 对象属性变化记录器，每个对象一个全局共享的即可
+class FReplicationChangelistMgr
+{
+    
+};
+
+
+
+class FReceivingRepState
+{
+    
+};
+
+
+
+class FSendingRepState
+{
+    
+};
+
+
+
+// FRepState 是网络复制系统中每个对象在每个连接上的独立复制状态容器。它的核心职责是：
+// 为单个对象在单个网络连接上维护发送和接收所需的所有状态信息
+class FRepState
+{
+public:
+    FRepState() {}
+
+    FSendingRepState SendingRepState;
+
+    FReceivingRepState ReceivingState;
+};
+
+
 class FRepLayout
 {
 public:
+    FRepLayout() :
+    ShadowBufferSize(0),
+    Class(nullptr)
+    {
+        
+    }
+    
     bool InitFromClass(ClassInfo* InClass);
+
+    bool InitChangedTracker(FRepChangedPropertyTracker* InTracker);
+
+    // FRepState的创建过程需要用到FRepLayout的内部数据，因此创建的职责交给FRepLayout
+    FRepState* CreateRepState(FRepChangedPropertyTracker* InTracker);
 
 private:
     // 一级字段描述类
     std::vector<FRepParentCmd> Parents;
     // 最终原子类型描述类
     std::vector<FRepLayoutCmd> Cmds;
+
+    int32 ShadowBufferSize;
+
+    ClassInfo* Class;
 };

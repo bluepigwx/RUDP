@@ -11,6 +11,8 @@
 class CChannel;
 class CNetConnection;
 class FRepLayout;
+class FRepChangedPropertyTracker;
+class FReplicationChangelistMgr;
 
 
 struct FChannelDefine
@@ -50,6 +52,10 @@ public:
 
     FRepLayout* GetObjectClassReplayout(ClassInfo* Class);
 
+    FRepChangedPropertyTracker* FindOrCreatePropertyTracker(CObject* InObject);
+
+    FReplicationChangelistMgr* GetReplicationChangelistMgr(CObject* InObject);
+
 protected:
     
     NetworkObjectList& GetActiveObjectList() { return NetObjList.ActiveObjectList; }
@@ -84,4 +90,10 @@ private:
     // 每个类型对应一个Replayout
     typedef std::map<ClassInfo*, FRepLayout*> ObjectReplayoutMap;
     ObjectReplayoutMap ReplayoutMap;
+
+    typedef std::map<CObject*, FRepChangedPropertyTracker*> ObjectChangedPropertyTrackerMap;
+    ObjectChangedPropertyTrackerMap ObjectChangedPropertyMap;
+
+    typedef std::map<CObject*, FReplicationChangelistMgr*> ObjectReplicationChangelistMgrMap;
+    ObjectReplicationChangelistMgrMap ReplicationChangelistMap;
 };

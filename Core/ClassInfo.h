@@ -227,7 +227,7 @@ struct DeferInitClassInfo
 
 // 固定长度普通类型数组
 #define PROPERTY_ARRAY_DEFINE(ThisClass, FieldName, ElementType, ArraySize, FieldFlag) \
-        CProperty* FieldName##FieldType = new CProperty(offsetof(ThisClass, FieldName), sizeof(ThisClass::FieldName), #FieldName, PropertyType_##ElementType, FieldFlag);\
+        CProperty* FieldName##FieldType = new CProperty(offsetof(ThisClass, FieldName), sizeof(ElementType), #FieldName, PropertyType_##ElementType, FieldFlag);\
         FieldName##FieldType->ArrayDim = ArraySize; \
         InClass->Properties.push_back(FieldName##FieldType);
 
@@ -240,7 +240,7 @@ struct DeferInitClassInfo
 
 // 复核类型数组定义
 #define PROPERTY_CLASS_ARRAY_DEFINE(ThisClass, FieldName, FieldType, FieldFlag, ArraySize) \
-        CProperty* FieldName##PropertyType_class_array = new CProperty(offsetof(ThisClass, FieldName), sizeof(ThisClass::FieldName), #FieldName, PropertyType_class, FieldFlag); \
+        CProperty* FieldName##PropertyType_class_array = new CProperty(offsetof(ThisClass, FieldName), sizeof(FieldType), #FieldName, PropertyType_class, FieldFlag); \
         FieldName##PropertyType_class_array->ArrayDim = ArraySize; \
         FieldName##PropertyType_class->TypeClassInfo = GET_CLASSINFO(FieldType); \
         InClass->Propertes.push_back(FieldName##PropertyType_class_array);

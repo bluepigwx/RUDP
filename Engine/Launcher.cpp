@@ -20,7 +20,7 @@ int32 Launcher::Init()
 void Launcher::Finit()
 {
     GEngine->Finit();
-    DestroyObject(static_cast<CEngine*>(GEngine));
+    DestroyObject(dynamic_cast<CObject*>(GEngine));
 }
 
 

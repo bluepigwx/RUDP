@@ -2,6 +2,7 @@
 
 #include <assert.h>
 
+#include "RepChangedPropertyTracker.h"
 #include "../Core/ClassInfo.h"
 
 
@@ -62,7 +63,6 @@ static int InitStructProperty(FSharedInitProperty& Shared, FStackInitProperty Ou
 
 
 
-
 // 递归展开，直到基本类型为止
 static int InitProperty(FSharedInitProperty& Shared, FStackInitProperty Stack)
 {
@@ -80,11 +80,25 @@ static int InitProperty(FSharedInitProperty& Shared, FStackInitProperty Stack)
         Shared.Cmds.emplace_back(FRepLayoutCmd(Stack.Property));
         FRepLayoutCmd& Cmd = Shared.Cmds[Shared.Cmds.size() - 1];
 
-        Cmd.Offset = Stack.Offset;  // 绝对偏移量
+        Cmd.Offset = Stack.Offset;
         Cmd.ElementSize = Stack.Property->Size;
         Cmd.ParentIndex = Shared.ParentHandle;
     }
     return 0;
+}
+
+
+static void BuildShadowOffset(std::vector<FRepParentCmd>& ParentCmd, std::vector<FRepLayoutCmd>& Cmds)
+{
+    for (auto it=ParentCmd.begin(); it !=ParentCmd.end(); ++it)
+    {
+        (*it).ShadowOffset = (*it).Offset;
+    }
+
+    for (auto cit=Cmds.begin(); cit!=Cmds.end(); ++cit)
+    {
+        (*cit).ShadowOffset = (*cit).Offset;
+    }
 }
 
 
@@ -125,5 +139,32 @@ bool FRepLayout::InitFromClass(ClassInfo* InClass)
         Parents[ParentHandle].CmdEnd = (int)Cmds.size();
     }
 
+    BuildShadowOffset(Parents, Cmds);
+    ShadowBufferSize = InClass->Size;
+    Class = InClass;
+
     return true;
 }
+
+
+bool FRepLayout::InitChangedTracker(FRepChangedPropertyTracker* InTracker)
+{
+    InTracker->Parent.resize(Parents.size());
+
+    auto it = InTracker->Parent.begin();
+    for (; it!=InTracker->Parent.end(); ++it)
+    {
+        (*it).IsConditional = false;
+    }
+
+    return true;
+}
+
+
+FRepState* FRepLayout::CreateRepState(FRepChangedPropertyTracker* InTracker)
+{
+    FRepState* NewState = new FRepState();
+    return NewState;
+}
+
+

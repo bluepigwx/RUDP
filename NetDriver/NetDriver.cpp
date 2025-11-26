@@ -1,12 +1,11 @@
 ﻿#include "NetDriver.h"
-
 #include <assert.h>
-
 #include "Channel.h"
 #include "NetConnection.h"
 #include "../Common/Log.h"
 #include "../Engine/GlobalNames.h"
 #include "Replayout.h"
+#include "RepChangedPropertyTracker.h"
 
 
 IMPLAMENT_CLASS_BEGIN(CNetDriver)
@@ -160,10 +159,42 @@ FRepLayout* CNetDriver::GetObjectClassReplayout(ClassInfo* Class)
 
     FRepLayout* NewReplayout = new FRepLayout();
     NewReplayout->InitFromClass(Class);
-
     ReplayoutMap[Class] = NewReplayout;
 
     return NewReplayout;
+}
+
+
+FRepChangedPropertyTracker* CNetDriver::FindOrCreatePropertyTracker(CObject* InObject)
+{
+    ObjectChangedPropertyTrackerMap::iterator it = ObjectChangedPropertyMap.find(InObject);
+    if (it != ObjectChangedPropertyMap.end())
+    {
+        return it->second;
+    }
+
+    FRepChangedPropertyTracker* NewTracker = new FRepChangedPropertyTracker();
+    ObjectChangedPropertyMap[InObject] = NewTracker;
+
+    FRepLayout* ReplayOut = GetObjectClassReplayout(InObject->GetClassInfo());
+    ReplayOut->InitChangedTracker(NewTracker);
+    
+    return NewTracker;
+}
+
+
+FReplicationChangelistMgr* CNetDriver::GetReplicationChangelistMgr(CObject* InObject)
+{
+    ObjectReplicationChangelistMgrMap::iterator it = ReplicationChangelistMap.find(InObject);
+    if (it != ReplicationChangelistMap.end())
+    {
+        return it->second;
+    }
+
+    FReplicationChangelistMgr* NewMgr = new FReplicationChangelistMgr();
+    ReplicationChangelistMap[InObject] = NewMgr;
+
+    return NewMgr;
 }
 
 
@@ -274,15 +305,41 @@ void CNetDriver::Finit()
         Ch = nullptr;
     }
 
-    
-    ObjectReplayoutMap::iterator it = ReplayoutMap.begin();
-    for (; it!=ReplayoutMap.end(); ++it)
+
     {
-        FRepLayout* Replayout = it->second;
-        delete Replayout;
-        Replayout = nullptr;
+        ObjectReplayoutMap::iterator it = ReplayoutMap.begin();
+        for (; it!=ReplayoutMap.end(); ++it)
+        {
+            FRepLayout* Replayout = it->second;
+            delete Replayout;
+            Replayout = nullptr;
+        }
+        ReplayoutMap.clear();
     }
-    ReplayoutMap.clear();
+    
+
+    {
+        ObjectChangedPropertyTrackerMap::iterator it = ObjectChangedPropertyMap.begin();
+        for (; it!=ObjectChangedPropertyMap.end(); ++it)
+        {
+            FRepChangedPropertyTracker* Tracker = it->second;
+            delete Tracker;
+            Tracker = nullptr;
+        }
+        ObjectChangedPropertyMap.clear();
+    }
+
+    {
+        ObjectReplicationChangelistMgrMap::iterator it = ReplicationChangelistMap.begin();
+        for (; it != ReplicationChangelistMap.end(); ++it)
+        {
+            FReplicationChangelistMgr* Mgr = it->second;
+            delete Mgr;
+            Mgr = nullptr;
+        }
+        ReplicationChangelistMap.clear();
+    }
+    
 }
 
 

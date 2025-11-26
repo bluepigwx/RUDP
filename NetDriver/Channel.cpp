@@ -58,10 +58,12 @@ FObjectReplicator* CActorChannel::FindOrCreateReplicator(CObject* InObject)
     {
         return it->second;
     }
-    // else
+    // else 创建新的对象复制器
     FObjectReplicator* Replicator = new FObjectReplicator();
     Replicator->InitWithObject(InObject, NetConnection);
     ReplicateMap[InObject] = Replicator;
+    
+    Replicator->StartReplicating(this);
     
     return Replicator;
 }
@@ -81,4 +83,5 @@ void CActorChannel::Cleanup()
 
     ActorReplicator = nullptr;
 }
+
 

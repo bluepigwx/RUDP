@@ -885,6 +885,7 @@
     <ClCompile Include="NetDriver\NetDriver.cpp" />
     <ClCompile Include="NetDriver\NetworkObjectList.cpp" />
     <ClCompile Include="NetDriver\ObjectReplicator.cpp" />
+    <ClCompile Include="NetDriver\RepChangedPropertyTracker.cpp" />
     <ClCompile Include="NetDriver\Replayout.cpp" />
     <ClCompile Include="NetDriver\SocketSystem.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -1218,6 +1219,7 @@
     <ClInclude Include="NetDriver\NetDriver.h" />
     <ClInclude Include="NetDriver\NetworkObjectList.h" />
     <ClInclude Include="NetDriver\ObjectReplicator.h" />
+    <ClInclude Include="NetDriver\RepChangedPropertyTracker.h" />
     <ClInclude Include="NetDriver\Replayout.h" />
     <ClInclude Include="NetDriver\SocketSystem.h" />
     <ClInclude Include="Server\Server.h" />

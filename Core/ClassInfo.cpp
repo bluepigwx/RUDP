@@ -103,7 +103,7 @@ void ClassInfo::BuildupReplicationProps()
 
             for (int j=0; j<pro->ArrayDim; ++j)
             {
-                ClassReps.emplace_back(FRepRecord(pro, j));
+                ClassReps.emplace_back(pro, j);
             }
         }
     }

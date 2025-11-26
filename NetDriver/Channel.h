@@ -39,7 +39,7 @@ private:
     // 服务器只要下发这个下标即可
     int32 Index;
 
-protected:
+public:
     CNetConnection* NetConnection;
 };
 
@@ -70,7 +70,7 @@ private:
 private:
     CActor* Actor;
 
-    // Actor自己的Replicator
+    // Actor自己的Replicator，用于驱动在这个通道上的属性比较和数据收发状态维护
     FObjectReplicator* ActorReplicator;
     // Actor以及自己所有组件的
     typedef std::map<CObject*, FObjectReplicator*> ObjectReplicatorMap;

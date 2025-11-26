@@ -1,2 +1,11 @@
 Launcher里面配置好Engine，初始化全局引擎变量
-Engine里面配置好各种自己要驱动的组件
+Engine里面配置好各种自己要驱动的组件，Engine模块负责协调好各个组件之间的工作交流
+
+
+CNetDriver :
+    FRepLayout : 每个类的内存布局描述组件，一个类型对应一个，全局公用
+    CNetConnection : 服务器与客户端之间的链接对象，一个CNetConnection拥有多个CChannel，用于不同任务的通讯层
+    CActorChannel : 服务器与客户端直接用于维护特定对象数据收发的通讯层，一个对象在特定链接上对应有一个CActorChannel
+        FObjectReplicator : 在CActorChannel中负责驱动对象数据复制的组件，因为每个对象在每个链接的特定Channel上通信情况都有所不
+        同，所以每个对象在每个CNetConnection上都会有一个实例，所以和CActorChannel是一一对应的
+    
