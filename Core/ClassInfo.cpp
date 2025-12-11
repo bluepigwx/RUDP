@@ -72,6 +72,7 @@ void ClassInfo::BuildupReplicationProps()
 
     do
     {
+        // 自己的加上基类的
         size_t NewSize = ClassReps.size() + NetProperty.size();
         if (NewSize == 0)
         {

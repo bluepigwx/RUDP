@@ -190,8 +190,18 @@ FReplicationChangelistMgr* CNetDriver::GetReplicationChangelistMgr(CObject* InOb
     {
         return it->second;
     }
-
-    FReplicationChangelistMgr* NewMgr = new FReplicationChangelistMgr();
+    
+    FRepLayout* Replayout = GetObjectClassReplayout(InObject->GetClassInfo());
+    assert(Replayout);
+    
+    FReplicationChangelistMgr* NewMgr = Replayout->CreateReplicationChangelistMgr(InObject);
+    assert(NewMgr);
+    
+    if (!NewMgr)
+    {
+        return nullptr;
+    }
+    
     ReplicationChangelistMap[InObject] = NewMgr;
 
     return NewMgr;

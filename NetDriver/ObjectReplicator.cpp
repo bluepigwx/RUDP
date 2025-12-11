@@ -4,6 +4,30 @@
 
 #include "NetDriver.h"
 #include "Replayout.h"
+#include "../Core/CoreNet.h"
+
+class FNetSerializeCB : public INetSerializeCB
+{
+public:
+    // 更新对象的属性变更列表
+    static EReplayoutResult UpdateChangelistMgr(
+        const FRepLayout& Replayout,
+        FSendingRepState* SendingState,
+        FReplicationChangelistMgr& InChangelistMgr,
+        const CObject* InObject,
+        const uint32 ReplicationFrame,
+        const FReplicationFlags Flags,
+        const bool bForceCompare
+        )
+    {
+        EReplayoutResult Result = Success;
+        
+        
+        
+        return Result;
+    }
+};
+
 
 int32 FObjectReplicator::InitWithObject(CObject* InObj, CNetConnection* InConn)
 {
@@ -39,6 +63,12 @@ void FObjectReplicator::StartReplicating(CActorChannel* InCh)
 
     ChangelistMgr = Conn->NetDriver->GetReplicationChangelistMgr(Object);
     assert(ChangelistMgr);
+}
+
+
+bool FObjectReplicator::ReplicatePropertes(FOutBunch& Bunch, FReplicationFlags RepFlags)
+{
+    return true;
 }
 
 

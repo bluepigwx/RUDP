@@ -147,6 +147,7 @@ bool FRepLayout::InitFromClass(ClassInfo* InClass)
 }
 
 
+
 bool FRepLayout::InitChangedTracker(FRepChangedPropertyTracker* InTracker)
 {
     InTracker->Parent.resize(Parents.size());
@@ -161,10 +162,171 @@ bool FRepLayout::InitChangedTracker(FRepChangedPropertyTracker* InTracker)
 }
 
 
+bool FRepLayout::IsEmpty()
+{
+    return Parents.empty();
+}
+
+
+FRepStateStaticBuffer FRepLayout::CreateShadowBuffer(CObject* InObject)
+{
+    assert(InObject);
+    
+    FRepStateStaticBuffer ShadowBuffer(InObject);
+    
+    InitRepStaticBuffer(ShadowBuffer, InObject);
+    
+    return ShadowBuffer;
+}
+
+
+void FRepLayout::InitRepStaticBuffer(FRepStateStaticBuffer& StaticBuffer, CObject* InObject)
+{
+    StaticBuffer.Buffer.resize(ShadowBufferSize);
+    
+    // 清理
+    ConstructPropertys(StaticBuffer);
+    // 拷贝
+    CopyPropertys(StaticBuffer, InObject);
+}
+
+
+void FRepLayout::ConstructPropertys(FRepStateStaticBuffer& StaticBuffer)
+{
+    uint8* Data = StaticBuffer.Buffer.data();
+    
+    std::vector<FRepParentCmd>::const_iterator cit = Parents.begin();
+    for (; cit!= Parents.end(); ++cit)
+    {
+        const FRepParentCmd& Parent = *cit;
+        
+        if (Parent.ArrayIndex == 0)
+        {
+            assert(Parent.Offset + Parent.Property->GetSize() <= StaticBuffer.Buffer.size());
+            Parent.Property->InitializeValue(Data + Parent.Offset);
+        }
+    }
+}
+
+
+void FRepLayout::CopyPropertys(FRepStateStaticBuffer& StaticBuffer, CObject* InObject)
+{
+    uint8* Data = StaticBuffer.Buffer.data();
+    
+    std::vector<FRepParentCmd>::const_iterator cit = Parents.begin();
+    for (; cit!=Parents.end(); ++cit)
+    {
+        const FRepParentCmd& Parent = *cit;
+        
+        if (Parent.ArrayIndex == 0)
+        {
+            Parent.Property->CopyCompleteValue(Data, (uint8*)InObject);
+        }
+    }
+}
+
+
 FRepState* FRepLayout::CreateRepState(FRepChangedPropertyTracker* InTracker)
 {
     FRepState* NewState = new FRepState();
     return NewState;
 }
 
+
+FReplicationChangelistMgr* FRepLayout::CreateReplicationChangelistMgr(const CObject* InObject)
+{
+    assert(InObject);
+    
+    FReplicationChangelistMgr* NewReplicationChangelistMgr = new FReplicationChangelistMgr(InObject, this);
+    return NewReplicationChangelistMgr;
+}
+
+
+EReplayoutResult FRepLayout::UpdateChangelistMgr(
+    const FRepLayout& Replayout, 
+    FSendingRepState* SendingState, 
+    FReplicationChangelistMgr& InChangelistMgr, 
+    const CObject* InObject, 
+    const int32 ReplicationFrame, 
+    const FReplicationFlags Flags, 
+    const bool bForceCompare)
+{
+    EReplayoutResult Result = Success;
+    
+    if (!bForceCompare && InChangelistMgr.LastReplicationFrame == ReplicationFrame)
+    {
+        return Result;
+    }
+    
+    
+    return CompareProperty(SendingState, &InChangelistMgr, InObject, Flags);
+}
+
+
+
+struct FComparePropertySharedParams
+{
+    const std::vector<FRepParentCmd>& Parents;
+    const std::vector<FRepLayoutCmd>& Cmds;
+    
+    FSendingRepState* const RepState;
+    FRepChangelistState* const Changelist;
+};
+
+
+struct FComparePropertyStackParams
+{
+    const CObject* Object;
+    
+};
+
+
+
+EReplayoutResult FRepLayout::CompareProperty(
+    FSendingRepState* SendingState, 
+    FReplicationChangelistMgr* RepChangelistMgr, 
+    const CObject* InObject, 
+    const FReplicationFlags Flags)
+{
+    if (IsEmpty())
+    {
+        return EReplayoutResult::Empty;
+    }
+    
+    FRepChangelistState& RepChangelistState = RepChangelistMgr->RepChangelistState;
+    RepChangelistState.CompareIndex++;
+    
+    int32 LeftSize = RepChangelistState.HistoryEnd - RepChangelistState.HistoryStart;
+    assert(LeftSize < FRepChangelistState::MAX_CHANGED_HISTORY);
+    
+    FRepChangedHistory& NewHistory = RepChangelistState.ChangeHistory[RepChangelistState.HistoryEnd];
+    std::vector<uint16>& Changed = NewHistory.Changed;
+    Changed.clear();
+    
+    // 开始进行比较与更新
+    
+    
+    if (Changed.size() == 0)
+    {
+        return EReplayoutResult::Empty;
+    }
+    
+    // 实际使用了才进行内存分配
+    if (NewHistory.Changed.size() > 0)
+    {
+        RepChangelistState.HistoryEnd++;
+    }
+    
+    LeftSize = RepChangelistState.HistoryEnd - RepChangelistState.HistoryStart;
+    if (LeftSize == FRepChangelistState::MAX_CHANGED_HISTORY)
+    {
+        // 缓存队列已经用完，进行存量合并
+    }
+    
+    // 最后回绕一下免得溢出
+    RepChangelistState.HistoryEnd = RepChangelistState.HistoryEnd % FRepChangelistState::MAX_CHANGED_HISTORY;
+    RepChangelistState.HistoryStart = RepChangelistState.HistoryStart % FRepChangelistState::MAX_CHANGED_HISTORY;
+    
+    return EReplayoutResult::Success;
+}
 

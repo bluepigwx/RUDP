@@ -1,7 +1,7 @@
 #pragma once
 
 #include "NetConnection.h"
-
+#include "NetType.h"
 
 class FRepLayout;
 class CObject;
@@ -9,6 +9,8 @@ class CNetConnection;
 class FRepState;
 class FReplicationChangelistMgr;
 class CActorChannel;
+class FOutBunch;
+
 
 
 // 单个对象的复制管理，负责单个对象在特定链接上的复制生命期管理
@@ -35,6 +37,9 @@ public:
 
     // 启动属性复制
     void StartReplicating(CActorChannel* InCh);
+    
+    //将这个对象变化的属性序列化到Bunch参数中，RepFlags则是本次复制的外部上下文
+    bool ReplicatePropertes(FOutBunch& Bunch, FReplicationFlags RepFlags);
 
 private:
     void InitObjectProperty();

@@ -6,11 +6,20 @@
 #include <string>
 
 #include "ObjectReplicator.h"
+#include "../Common/IOBuffer.h"
 
 class CNetDriver;
 class CNetConnection;
 class CActor;
 class FObjectReplicator;
+
+
+class FOutBunch : public IBuffer1k
+{
+public:
+    
+};
+
 
 // 特定网络对象的传输层
 class CChannel : public CObject
@@ -53,7 +62,8 @@ class CActorChannel : public CChannel
 public:
     CActorChannel() :
     Actor(nullptr),
-    ActorReplicator(nullptr)
+    ActorReplicator(nullptr),
+    bReplicatingActor(false)
     {
         
     }
@@ -75,4 +85,6 @@ private:
     // Actor以及自己所有组件的
     typedef std::map<CObject*, FObjectReplicator*> ObjectReplicatorMap;
     ObjectReplicatorMap ReplicateMap;
+    
+    bool bReplicatingActor;
 };

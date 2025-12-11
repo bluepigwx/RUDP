@@ -1205,11 +1205,13 @@
     <ClInclude Include="Core\ClassInfo.h" />
     <ClInclude Include="Core\ClassInfoUtile.h" />
     <ClInclude Include="Core\CObject.h" />
+    <ClInclude Include="Core\CoreNet.h" />
     <ClInclude Include="Core\GenericPlatform.h" />
     <ClInclude Include="Core\Typedef.h" />
     <ClInclude Include="Engine\Actor.h" />
     <ClInclude Include="Engine\EngeinInterface.h" />
     <ClInclude Include="Engine\Engine.h" />
+    <ClInclude Include="Engine\EngineTypeDef.h" />
     <ClInclude Include="Engine\GlobalNames.h" />
     <ClInclude Include="Engine\Launcher.h" />
     <ClInclude Include="NetDriver\Channel.h" />
@@ -1217,6 +1219,7 @@
     <ClInclude Include="NetDriver\IPNetConnection.h" />
     <ClInclude Include="NetDriver\NetConnection.h" />
     <ClInclude Include="NetDriver\NetDriver.h" />
+    <ClInclude Include="NetDriver\NetType.h" />
     <ClInclude Include="NetDriver\NetworkObjectList.h" />
     <ClInclude Include="NetDriver\ObjectReplicator.h" />
     <ClInclude Include="NetDriver\RepChangedPropertyTracker.h" />

@@ -50,6 +50,21 @@ public:
         
     }
     
+    inline void InitializeValue(uint8* Dest) const
+    {
+        memset(Dest, 0, GetSize());
+    }
+    
+    inline void CopyCompleteValue(uint8* Dest, const uint8* Src) const
+    {
+        memcpy(Dest, Src, GetSize());
+    }
+    
+    inline uint32 GetSize() const
+    {
+        return Size * ArrayDim;
+    }
+    
 public:
     int Offset;
     int Size;
@@ -136,7 +151,7 @@ public:
 
     // 类型的字段属性，只保留一级字段
     std::vector<CProperty*> Properties;
-    // 记录用于进行属性网络复制的字段
+    // 记录用于进行属性网络复制的字段，如果Properties是数组则这里是数组展开后的形式
     std::vector<FRepRecord> ClassReps;
 
     int ClassFlag;

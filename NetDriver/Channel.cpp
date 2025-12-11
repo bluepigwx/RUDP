@@ -2,6 +2,8 @@
 #include <cassert>
 
 #include "NetConnection.h"
+#include "NetType.h"
+#include "../Common/Log.h"
 #include "../Engine/Actor.h"
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -42,7 +44,29 @@ void CActorChannel::SetChannelActor(CActor* InActor)
 void CActorChannel::ReplicateActor()
 {
     assert(Actor);
+    assert(ActorReplicator);
     
+    // 避免递归处理
+    if (bReplicatingActor)
+    {
+        Log(LOG_CAT_ERR, "bReplicatingActor");
+        return;
+    }
+    
+    bReplicatingActor = true;
+    
+    // do replication stuff...
+    FOutBunch Bunch;
+    FReplicationFlags RepFlags;
+    
+    bool WroteSomething = ActorReplicator->ReplicatePropertes(Bunch, RepFlags);
+    
+    if (WroteSomething)
+    {
+        //Send Stuff
+    }
+    
+    bReplicatingActor = false;
 }
 
 

@@ -20,5 +20,5 @@ int main(int argc, char** argv)
 
     Common_Run();
 
-    Common_Finish();
+    //Common_Finish();
 }
