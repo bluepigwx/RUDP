@@ -21,78 +21,222 @@
     <ClCompile Include="RUDP.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Command.cpp">
+    <ClCompile Include="Client\Client.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Console.cpp">
+    <ClCompile Include="Client\CL_Login.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="FSocket.cpp">
+    <ClCompile Include="Common\Command.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Net.cpp">
+    <ClCompile Include="Common\Common.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="SocketSystem.cpp">
+    <ClCompile Include="Common\Console.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Client.cpp">
+    <ClCompile Include="Common\CVar.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="CL_Login.cpp">
+    <ClCompile Include="Common\Log.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Common.cpp">
+    <ClCompile Include="Common\Net.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="SV_Login.cpp">
+    <ClCompile Include="Common\Net_Chan.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Log.cpp">
+    <ClCompile Include="Core\ClassInfo.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Net_Chan.cpp">
+    <ClCompile Include="Core\CObject.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Server.cpp">
+    <ClCompile Include="Engine\Actor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Engine.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Launcher.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="NetDriver\Channel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="NetDriver\FSocket.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="NetDriver\IPNetConnection.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="NetDriver\NetConnection.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="NetDriver\NetDriver.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="NetDriver\NetworkObjectList.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="NetDriver\ObjectReplicator.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="NetDriver\RepChangedPropertyTracker.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="NetDriver\Replayout.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="NetDriver\SocketSystem.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Server\Server.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Server\SV_Login.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\TestEngine.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\TestNetDriver.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Test.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkSystem\EventLoop.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkSystem\Ev_Select.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkSystem\Ev_Impl.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Command.h">
+    <ClInclude Include="Client\Client.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Common.h">
+    <ClInclude Include="Common\Command.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Console.h">
+    <ClInclude Include="Common\Common.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="FSocket.h">
+    <ClInclude Include="Common\Console.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="IOBuffer.h">
+    <ClInclude Include="Common\CVar.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Net.h">
+    <ClInclude Include="Common\IOBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Net_Chan.h">
+    <ClInclude Include="Common\Log.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Server.h">
+    <ClInclude Include="Common\Net.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="SocketSystem.h">
+    <ClInclude Include="Common\Net_Chan.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Client.h">
+    <ClInclude Include="Common\Protocol.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Log.h">
+    <ClInclude Include="Core\ClassInfo.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Protocol.h">
+    <ClInclude Include="Core\ClassInfoUtile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\CObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\CoreNet.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GenericPlatform.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Typedef.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Actor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EngeinInterface.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Engine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EngineTypeDef.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GlobalNames.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Launcher.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NetDriver\Channel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NetDriver\FSocket.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NetDriver\IPNetConnection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NetDriver\NetConnection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NetDriver\NetDriver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NetDriver\NetType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NetDriver\NetworkObjectList.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NetDriver\ObjectReplicator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NetDriver\RepChangedPropertyTracker.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NetDriver\Replayout.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NetDriver\SocketSystem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\Server.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\TestEngine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\TestNetDriver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\Test.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkSystem\EventLoop.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkSystem\Ev_Select.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkSystem\Ev_Impl.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
